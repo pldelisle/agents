@@ -1,0 +1,4 @@
+interface:
+  display_name: "Software Engineering"
+  short_description: "Apply repository software engineering standards"
+  default_prompt: "Use $apply-software-engineering to implement and verify this software change."

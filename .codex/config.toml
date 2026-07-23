@@ -1,0 +1,10 @@
+[agents]
+# Permit bounded Product Owner refinement and parallel engineering work packages.
+max_depth = 2
+max_threads = 4
+
+[mcp_servers.linear]
+# OAuth credentials remain user-scoped and are never committed here.
+url = "https://mcp.linear.app/mcp"
+enabled = true
+default_tools_approval_mode = "writes"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Product Ownership"
+  short_description: "Refine and coordinate the Linear product backlog"
+  default_prompt: "Use $apply-product-ownership to read Linear through MCP, refine and order the backlog, and synchronize only authorized changes."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "SDD Test Engineering"
+  short_description: "Build executable evidence from specifications"
+  default_prompt: "Use $apply-specification-driven-test-engineering to derive independent executable evidence and trace it to this specification."

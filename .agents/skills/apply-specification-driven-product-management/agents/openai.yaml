@@ -1,0 +1,4 @@
+interface:
+  display_name: "SDD Product Management"
+  short_description: "Shape strategy and upstream SDD product intent"
+  default_prompt: "Use $apply-specification-driven-product-management to turn product evidence and strategy into governed upstream intent for specification-driven delivery."

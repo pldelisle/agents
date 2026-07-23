@@ -1,0 +1,4 @@
+interface:
+  display_name: "Test Engineering"
+  short_description: "Design and implement risk-based software tests"
+  default_prompt: "Use $apply-test-engineering to design, implement, and execute the tests this change needs."

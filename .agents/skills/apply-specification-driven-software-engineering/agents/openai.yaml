@@ -1,0 +1,4 @@
+interface:
+  display_name: "SDD Software Engineering"
+  short_description: "Implement changes from governed specifications"
+  default_prompt: "Use $apply-specification-driven-software-engineering to plan, implement, trace, and verify this change from an approved specification."

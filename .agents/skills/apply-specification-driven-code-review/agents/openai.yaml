@@ -1,0 +1,4 @@
+interface:
+  display_name: "SDD Code Review"
+  short_description: "Review SDD artifacts, traceability, and code"
+  default_prompt: "Use $apply-specification-driven-code-review to independently review this specification-driven change from governing intent through implementation evidence."
