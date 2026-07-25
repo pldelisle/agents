@@ -1,4 +1,0 @@
-interface:
-  display_name: "Apply Code Review"
-  short_description: "Review changes for correctness, design, and security"
-  default_prompt: "Use $apply-code-review to independently review this change and report evidence-backed findings."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Engineer Tests"
+  short_description: "Design and implement risk-based software tests"
+  default_prompt: "Use $engineer-tests to design, implement, and execute the tests this change needs."

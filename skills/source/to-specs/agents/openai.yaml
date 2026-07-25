@@ -1,0 +1,4 @@
+interface:
+  display_name: "To Specs"
+  short_description: "Turn product vision into SDD specifications"
+  default_prompt: "Use $to-specs to turn this product-vision conversation into a reviewable, traceable specification for specification-driven development."

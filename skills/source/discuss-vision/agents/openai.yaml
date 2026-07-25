@@ -1,0 +1,4 @@
+interface:
+  display_name: "Discuss Vision"
+  short_description: "Clarify vision one decision at a time"
+  default_prompt: "Use $discuss-vision to inspect the repository, sharpen product vision one decision at a time, and write resolved vocabulary to CONTEXT.md."

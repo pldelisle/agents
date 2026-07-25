@@ -1,0 +1,4 @@
+interface:
+  display_name: "Code Review"
+  short_description: "Review changes for correctness, design, and security"
+  default_prompt: "Use $code-review to independently review this change against its approved design and engineering standards."

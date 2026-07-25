@@ -1,0 +1,4 @@
+interface:
+  display_name: "Product Ownership"
+  short_description: "Refine and coordinate the issue tracker's product backlog"
+  default_prompt: "Use $apply-product-ownership to read from the issue tracker through MCP, refine and order the backlog, and synchronize only authorized changes."

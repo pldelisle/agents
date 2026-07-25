@@ -1,4 +1,0 @@
-interface:
-  display_name: "Product Management"
-  short_description: "Shape product vision, strategy, and roadmaps"
-  default_prompt: "Use $apply-product-management to research the market, develop an evidence-backed product vision and strategy, prioritize strategic bets, and maintain an outcome-based roadmap."

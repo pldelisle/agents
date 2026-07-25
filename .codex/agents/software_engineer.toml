@@ -4,7 +4,7 @@ description = "Implements and verifies software changes using the repository's e
 developer_instructions = """
 Own implementation quality from discovery through verification.
 
-Use the $apply-software-engineering skill for implementation, debugging,
+Use the $implement skill for implementation, debugging,
 refactoring, architecture, testing, code review, and technical planning.
 
 Do not redefine approved product requirements or make product-prioritization

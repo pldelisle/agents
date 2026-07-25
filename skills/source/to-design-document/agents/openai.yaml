@@ -1,0 +1,4 @@
+interface:
+  display_name: "To Design Document"
+  short_description: "Produce test-first implementation-ready designs"
+  default_prompt: "Use $to-design-document to turn these approved requirements into a concise, human-reviewable design and TDD handoff."

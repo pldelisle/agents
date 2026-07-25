@@ -1,4 +1,0 @@
-interface:
-  display_name: "SDD Product Ownership"
-  short_description: "Create governed, testable feature specifications"
-  default_prompt: "Use $apply-specification-driven-product-ownership to create, clarify, baseline, and govern a testable feature specification."
