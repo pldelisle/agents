@@ -6,11 +6,11 @@ source_skills="$repository_root/skills/source"
 
 usage() {
   cat <<'EOF'
-Usage: scripts/build-skills.sh [codex|claude|all] [linear|jira]
+Usage: scripts/build-skills.sh [codex|claude|kiro|all] [linear|jira]
 
 Materialize runtime-specific skill folders from skills/source. Generated folders
 must not be edited directly. Without a tracker argument, `all` preserves the
-default pair: Codex with Linear and Claude Code with Jira.
+default set: Codex with Linear, Claude Code with Jira, and Kiro with Jira.
 EOF
 }
 
@@ -67,11 +67,30 @@ build_claude() {
   adapt_claude "$target"
 }
 
+adapt_kiro() {
+  local target="$1"
+  find "$target" -type d -name agents -prune -exec rm -rf {} +
+  find "$target" -type f -name '*.md' -print0 | xargs -0 perl -pi -e '
+    s/\bCodex\b/Kiro/g;
+    s/\bcodex\b/kiro/g;
+  '
+}
+
+build_kiro() {
+  local tracker="$1"
+  local target="$repository_root/.kiro/skills"
+  materialize "$target"
+  if [[ "$tracker" == jira ]]; then
+    adapt_jira "$target"
+  fi
+  adapt_kiro "$target"
+}
+
 runtime="${1:-all}"
 tracker="${2:-}"
 
 case "$runtime" in
-  codex|claude|all) ;;
+  codex|claude|kiro|all) ;;
   -h|--help) usage; exit 0 ;;
   *) usage >&2; exit 2 ;;
 esac
@@ -84,13 +103,16 @@ esac
 case "$runtime" in
   codex) build_codex "${tracker:-linear}" ;;
   claude) build_claude "${tracker:-jira}" ;;
+  kiro) build_kiro "${tracker:-jira}" ;;
   all)
     if [[ -n "$tracker" ]]; then
       build_codex "$tracker"
       build_claude "$tracker"
+      build_kiro "$tracker"
     else
       build_codex linear
       build_claude jira
+      build_kiro jira
     fi
     ;;
 esac
