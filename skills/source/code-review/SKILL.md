@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Perform independent, evidence-backed review of code changes, pull requests, diffs, refactors, tests, migrations, dependencies, and design documents against both approved design intent and engineering standards. Use for code review, pre-merge review, design-document review or conformance, architecture review, regression-risk assessment, secure code review, threat modelling, or review of authentication, authorization, secrets, sensitive data, external integrations, CI/CD, infrastructure, and software-supply-chain changes. Do not use to implement the change or redefine product requirements.
+description: Perform independent, evidence-backed review of code changes, branches, pull requests, work-in-progress diffs, refactors, tests, migrations, dependencies, and design documents along separate Spec and Standards axes. Use for code review, pre-merge review, review since a commit, branch, tag, or merge-base, design conformance, architecture review, regression-risk assessment, secure code review, threat modelling, or review of authentication, authorization, secrets, sensitive data, external integrations, CI/CD, infrastructure, and software-supply-chain changes. Run available Spec and Standards reviews in parallel context-isolated subagents and report them side by side. Do not use to implement the change or redefine product requirements.
 ---
 
 # Code Review Standard
@@ -36,30 +36,35 @@ specific, reachable, actionable, and supported by evidence.
 
 Evaluate two axes independently so strength in one cannot mask failure in the other:
 
-1. **Design conformance:** determine whether the change faithfully implements its governing
-   requirements and approved design document. Requirements own **what and why**; the design
-   document owns **how and how it will be proved**. Check for missing or partial outcomes, scope
-   creep, behavior that contradicts the design, and implementation decisions with no traceable
-   authority. Record the design revision and status; never treat a draft or superseded document
-   as approved intent.
-2. **Engineering standards:** determine whether the change follows documented repository
-   standards and preserves correctness, security, architecture, operability, and maintainability.
-   Repository rules take precedence over generic heuristics. Treat a heuristic as a prompt for
-   investigation, not as a hard rule.
+1. **Spec:** determine whether the change faithfully implements its originating issue, PRD,
+   feature specification, acceptance examples, and approved design document. Product artifacts
+   own **what and why**; the approved design owns **how and how it will be proved**. Check for
+   missing or partial outcomes, scope creep, incorrect implementations of requested behavior,
+   and decisions with no traceable authority. Record artifact revisions and approval states;
+   never treat a draft or superseded document as approved intent.
+2. **Standards:** determine whether the change follows documented repository standards and
+   preserves correctness, security, architecture, operability, and maintainability. Repository
+   rules take precedence over generic heuristics. Apply the always-on Fowler smell baseline in
+   [architecture-and-refactoring.md](references/architecture-and-refactoring.md), but treat every
+   smell as a labelled judgement call rather than a hard violation.
 
 When the reviewed artifact is itself a design document, assess that revision against its
 governing requirements, repository design-document standard, and declared readiness state;
 do not require a draft under review to be approved already.
 
-For an implementation review, if no governing requirement or approved design document exists,
-continue the engineering-standards review and mark the unavailable portion of design conformance
-as not assessed. Missing authority is a finding only when the repository requires it; otherwise
-report it as review uncertainty.
+For an implementation review, if no governing spec or approved design document exists, ask the
+user where it is. If the user confirms that none exists, continue the Standards review, skip the
+Spec subagent, and report `no spec available`. Missing authority is a finding only when the
+repository requires it; otherwise report it as review uncertainty.
 
-For a material review, keep the axes as separate investigative passes. Use parallel subagents
-when they are available and allowed: give both the same pinned diff and commit list, give the
-design pass the governing artifacts, and give the standards pass the repository rules and
-applicable risk references. Independently validate every candidate finding before reporting it.
+For every change review, run the available axes as parallel, context-isolated subagents when
+subagents are available and allowed. Launch both without waiting for either result. Give both the
+same pinned diff command and commit list; give the Spec pass only the governing artifacts and
+give the Standards pass only the repository rules, full smell baseline, and applicable risk
+references. If subagents are unavailable or prohibited, perform two explicitly separate passes
+and disclose that limitation. Never let one axis's conclusions influence the other's
+investigation. Validate candidate findings against the repository before reporting them, but keep
+accepted findings in their originating axis and order them only within that axis.
 
 ## Review priority
 
@@ -72,8 +77,8 @@ Apply this order when concerns compete:
 5. Keep the design understandable and economical to change.
 6. Enforce style only when a repository rule or material readability problem justifies it.
 
-Approve once the change improves or preserves overall system health and no material defect
-remains. Do not demand perfection, speculative generality, or unrelated cleanup.
+Within each axis, approve once the change improves or preserves overall system health and no
+material defect remains. Do not demand perfection, speculative generality, or unrelated cleanup.
 
 ## Select review depth
 
@@ -92,8 +97,8 @@ Treat a review as elevated risk when the change affects any of these:
 - a cross-layer design, new architectural mechanism, or broad refactor.
 
 For elevated security risk, read and apply [security-review.md](references/security-review.md)
-in full. For cross-boundary design or material refactoring, read and apply
-[architecture-and-refactoring.md](references/architecture-and-refactoring.md) in full. Read
+in full. Read [architecture-and-refactoring.md](references/architecture-and-refactoring.md) in
+full for the always-on smell baseline and for cross-boundary design or material refactoring. Read
 [foundations.md](references/foundations.md) when adapting the method or resolving a conflict
 between review practices.
 
@@ -105,36 +110,95 @@ Identify exactly what is under review before judging it:
 
 - determine the base and head revisions, working-tree state, staged and unstaged changes,
   generated files, and whether the supplied diff is complete;
-- when the user supplies a fixed point such as a commit, branch, or tag, verify it with
-  `git rev-parse --verify <fixed-point>`, pin the merge-base comparison as
-  `git diff <fixed-point>...HEAD`, and record `git log <fixed-point>..HEAD --oneline`; use the
-  confirmed target branch as the fixed point in a pull-request review;
+- for a branch, pull request, work-in-progress branch, or “review since X” request, require the
+  fixed point: the commit, branch, tag, or revision the user supplied. If none was supplied and
+  no pull-request target can be discovered authoritatively, ask for it rather than assuming
+  `main` or another default branch;
+- resolve the fixed point once with `git rev-parse --verify <fixed-point>`, record its resolved
+  SHA, pin the merge-base comparison exactly as `git diff <fixed-point>...HEAD`, and capture
+  `git log <fixed-point>..HEAD --oneline`. Reuse that exact command and commit list for both
+  axes;
 - when staged, unstaged, or untracked work is in scope, inspect `git diff`, `git diff --cached`,
   and `git ls-files --others --exclude-standard` separately; a three-dot comparison covers
   committed trees, not the working tree;
 - verify that the expected diff is non-empty before deep review. Do not silently substitute a
-  different base, a two-dot comparison, or a default branch when the requested range is invalid;
+  different base, a two-dot comparison, or a default branch when the requested range is invalid.
+  Stop early on an invalid ref or empty expected diff rather than failing inside subagents;
 - state the intended outcome in observable terms and list any missing evidence that limits
   the review;
 - preserve unrelated work and do not mutate tracked files while gathering evidence.
 
 Resolve authority for each review axis without conflating them:
 
-- For design conformance, prefer an artifact or issue the user or pull request identifies, then
-  issue or story references in the branch name and commit messages, then matching approved
-  requirements, acceptance examples, and design documents under repository conventions. Record
-  the exact revision and approval state. Ask for the source only when the missing intent would
-  materially change the review; if none exists, mark that portion not assessed.
-- For engineering standards, read applicable `AGENTS.md`, `CONTRIBUTING.md`, coding standards,
+- For Spec, search in this order: (1) originating issue references in the pinned commit messages
+  or pull request, such as `#123`, `Closes #45`, or `!67`; (2) a spec path the user supplied;
+  (3) a matching PRD, feature spec, acceptance document, or approved design under `docs/`,
+  `specs/`, `.scratch/`, or repository conventions. Fetch issue content read-only through the
+  repository's documented issue-tracker workflow. If `docs/agents/issue-tracker.md` is absent,
+  use another repository-defined workflow if present; if `/setup-matt-pocock-skills` is an
+  available command, run it, otherwise ask for the source rather than guessing or using an
+  undocumented integration. Record the exact revision and approval state. If discovery finds
+  nothing, ask the user where the spec is; skip the Spec pass only after they confirm none exists.
+- For Standards, read applicable `AGENTS.md`, `CONTRIBUTING.md`, coding standards,
   language or framework guidance, architecture decisions, public contracts, and repository-
-  defined check commands. When a documented local rule conflicts with a generic review
-  heuristic, the local rule wins unless it violates a higher-authority safety or contract
-  requirement.
+  defined check commands. Read the full smell baseline from the architecture/refactoring
+  reference even when the repository documents no standards. When a documented local rule
+  conflicts with a smell heuristic, the local rule wins unless it violates a higher-authority
+  safety or contract requirement. Skip concerns reliably enforced by repository tooling unless
+  the change bypasses or weakens that enforcement.
 
 If the base, intended behavior, or relevant artifact cannot be established, continue with
 safe inspection where useful but label the review partial. Do not invent the missing contract.
 
-### 2. Build a semantic change map
+### 2. Launch the axis passes
+
+For every change review, launch one general-purpose/default subagent per available axis in
+parallel. Do not send one axis's source artifacts or preliminary conclusions to the other.
+Subagents share the repository but must remain read-only.
+
+Use this Standards prompt, filling every bracketed field and pasting the baseline itself rather
+than only linking to it:
+
+```text
+Review only the Standards axis.
+Pinned diff command: [exact git diff <fixed-point>...HEAD command]
+Commits: [exact git log output]
+Standards sources: [paths]
+Applicable risk references: [paths]
+Fowler smell baseline: [paste the full always-on baseline from
+architecture-and-refactoring.md]
+
+Inspect the diff and the minimum surrounding code needed to validate it. Report, per file/hunk
+where relevant: (a) every documented-standard breach, citing the standard file and rule; and
+(b) every supported baseline smell, naming it and quoting the narrow hunk. Distinguish hard
+violations from judgement calls. A documented repository standard overrides the smell baseline;
+baseline smells are always judgement calls. Skip anything tooling reliably enforces. Apply the
+provided security or architecture references where triggered. Validate reachability and concrete
+consequence before asserting a defect. Return findings, checks, and residual uncertainty in
+under 400 words.
+```
+
+Use this Spec prompt:
+
+```text
+Review only the Spec axis.
+Pinned diff command: [exact git diff <fixed-point>...HEAD command]
+Commits: [exact git log output]
+Governing artifacts and revisions: [paths or fetched contents]
+
+Inspect the diff and the minimum surrounding code needed to validate it. Report: (a) requirements
+the spec asks for that are missing or partial; (b) behavior in the diff that was not asked for;
+and (c) requirements that look implemented but whose implementation is wrong. Quote the spec
+line or issue text for every finding and cite the narrow code location. Distinguish approved
+requirements from drafts or superseded text. Return findings, checks, and residual uncertainty
+in under 400 words.
+```
+
+If the user confirmed there is no spec, do not launch a Spec subagent. If subagents are
+unavailable or prohibited, use the same prompts as two separate local passes and disclose that
+they were sequential.
+
+### 3. Build a semantic change map
 
 Read the change description and broad diff first. Then inspect complete changed files and the
 relevant callers, callees, tests, schemas, configuration, and runtime wiring. Map:
@@ -148,7 +212,7 @@ relevant callers, callees, tests, schemas, configuration, and runtime wiring. Ma
 Distinguish facts observed in artifacts from hypotheses and unknowns. A list of changed files
 is not a change map; explain how behavior moves through the system.
 
-### 3. Review the design before the lines
+### 4. Review the design before the lines
 
 Ask whether the change belongs in this system and in these components. Evaluate:
 
@@ -167,7 +231,7 @@ Ask whether the change belongs in this system and in these components. Evaluate:
 Do not reject a small, direct design for lacking layers or patterns. Do not accept a locally
 clean diff that creates a system-level inconsistency.
 
-### 4. Inspect behavior path by path
+### 5. Inspect behavior path by path
 
 Trace each meaningful path from input to observable result, including the return path and
 side effects. Inspect only applicable classes of risk, but do not skip a class merely because
@@ -222,7 +286,7 @@ tests pass.
 - Prefer a small refactoring direction that preserves behavior. Do not prescribe redesign
   when a local correction resolves the demonstrated problem.
 
-### 5. Perform security triage on every change
+### 6. Perform security triage on every change
 
 Always ask:
 
@@ -240,7 +304,7 @@ If every answer is demonstrably no, record security as baseline-only and continu
 answer is yes or uncertain, apply the full security reference and construct a focused threat
 model. Security review is risk-triggered; security triage is mandatory.
 
-### 6. Evaluate verification evidence
+### 7. Evaluate verification evidence
 
 Map requirements, invariants, failure modes, and threats to evidence. Inspect tests as
 production-quality code and ask whether they could pass while the implementation is broken.
@@ -261,7 +325,7 @@ production-quality code and ask whether they could pass while the implementation
 - Recheck repository status after commands and report checks that rewrote or created material
   artifacts.
 
-### 7. Validate each candidate finding
+### 8. Validate each candidate finding
 
 Before reporting a finding, establish all of the following:
 
@@ -280,8 +344,9 @@ subjective preferences and speculative future-proofing.
 
 ## Severity and disposition
 
-Assign severity from demonstrated impact and plausible reachability. Do not inflate severity
-to gain attention.
+Assign severity from demonstrated impact and plausible reachability. Order findings by severity
+within each axis only; never build a single cross-axis ranking. Do not inflate severity to gain
+attention.
 
 - **P0 — critical:** readily exploitable broad security compromise, active credential
   exposure, irreversible data loss or corruption, or a change unsafe to deploy at all.
@@ -298,19 +363,39 @@ Use confidence separately: high when directly reproduced or structurally certain
 when the path is supported but an environmental assumption remains; low only for questions,
 not asserted findings.
 
-Recommend **block** for any unresolved P0 or P1, unmet acceptance outcome, or review evidence
-too incomplete to assess a high-risk change. Recommend **comment** for bounded P2/P3 findings.
-Recommend **approve** only when no material finding remains and evidence is proportionate to
-risk. Approval is a technical recommendation, not product acceptance or deployment authority.
+Give each axis its own disposition. Recommend **block** within an axis for an unresolved P0 or
+P1, an unmet acceptance outcome, or evidence too incomplete to assess a high-risk change.
+Recommend **comment** within an axis for bounded P2/P3 findings. Recommend **approve** within an
+axis only when no material finding remains and evidence is proportionate to risk. Approval is a
+technical recommendation, not product acceptance or deployment authority.
 
 ## Review output
 
-Lead with findings ordered by severity. Use this structure for each finding:
+Report the two axes side by side under these exact headings, keeping subagent findings verbatim
+or lightly cleaning them for consistent locations and terminology:
+
+```markdown
+## Standards
+
+Disposition: block | comment | approve
+
+...
+
+## Spec
+
+Disposition: block | comment | approve | not assessed — no spec available
+
+...
+```
+
+Do not merge, deduplicate across, or rerank the two reports. A concern supported independently
+by both axes may appear in both with its axis-specific evidence. Within an axis, use this
+structure for each finding:
 
 ```text
 [P1] Imperative, consequence-focused title
-Axis: Design conformance | Engineering standards
 Location: path/to/file.py:line
+Basis: cited requirement or documented standard | labelled judgement call
 Evidence: What the changed code does and the reachable trigger.
 Impact: Who or what is affected and how.
 Direction: The smallest outcome the correction must achieve.
@@ -318,20 +403,29 @@ Confidence: High | Medium
 ```
 
 Keep locations narrow and comments self-contained. Address the code, not the author. Clearly
-label blocking requirements, questions, and optional suggestions.
+label documented-standard breaches, smell-based judgement calls, blocking requirements,
+questions, and optional suggestions.
 
-After findings, report:
+Also report:
 
-1. **Verdict:** block, comment, or approve.
-2. **Axis summary:** status and finding count for design conformance and engineering standards,
-   including the most severe issue within each axis. Do not average the axes into a pass.
-3. **Review scope:** fixed point, head, diff form, commits, and behavioral surfaces inspected.
-4. **Evidence:** tests, analysis, commands, and results independently verified.
-5. **Residual risks:** missing authority, paths, environments, or security assumptions not
+1. **Review scope:** fixed point and resolved SHA, head, exact diff command, commits, working-tree
+   additions if any, and behavioral surfaces inspected.
+2. **Evidence:** tests, analysis, commands, and results independently verified.
+3. **Residual risks:** missing authority, paths, environments, or security assumptions not
    verified.
 
 If there are no findings, say so directly, then provide the same scope, evidence, and residual
 risk sections. Never pad an empty review with low-value comments.
+
+End with one line containing the Standards finding count and worst Standards issue, then the
+Spec finding count and worst Spec issue. Use `none` or `not assessed — no spec available` as
+applicable. Use:
+
+```text
+Summary: Standards — <count> findings; worst: <issue|none> | Spec — <count> findings; worst: <issue|none|not assessed — no spec available>
+```
+
+Do not choose a single winner or average the axes.
 
 ## Re-review
 

@@ -16,10 +16,10 @@ to any one framework.
   perfect.
 - Matt Pocock, [mattpocock/skills](https://github.com/mattpocock/skills), especially the
   [code-review skill](https://github.com/mattpocock/skills/blob/main/skills/engineering/code-review/SKILL.md).
-  Adopt fixed-point merge-base validation, independent standards and design-conformance axes,
-  explicit authority discovery, and context-separated review passes. Adapt its source-artifact
-  terminology to this repository's approved design-document model and keep delegation
-  proportional to availability and review risk.
+  Adopt fixed-point merge-base validation, independent Standards and Spec axes, explicit
+  authority discovery, context-separated parallel review passes, and side-by-side reporting.
+  Treat this repository's approved design document as part of the governing Spec chain rather
+  than collapsing implementation design into product intent.
 - Alberto Bacchelli and Christian Bird,
   [*Expectations, Outcomes, and Challenges of Modern Code Review*](https://www.microsoft.com/en-us/research/publication/expectations-outcomes-and-challenges-of-modern-code-review/),
   ICSE 2013. Adopt change understanding as the prerequisite for useful review and recognize
@@ -88,8 +88,8 @@ The skill deliberately combines these traditions as follows:
 
 - Use inspection discipline to make reviews reproducible, but keep process proportional to
   risk and change size.
-- Keep design conformance and engineering standards independently visible so a pass on one axis
-  cannot hide a failure on the other.
+- Keep Spec and Standards independently visible so a pass on one axis cannot hide a failure on
+  the other.
 - Review design before details because locally correct code can still violate system structure
   or quality-attribute goals.
 - Use refactoring concepts to locate change risk, but require a concrete consequence before

@@ -97,42 +97,55 @@ convergence trigger, failure behavior, and user-visible consequence are known.
 
 ## 5. Refactoring diagnostics
 
-Use refactoring literature to identify where a change may be expensive or unsafe to evolve.
-Do not report a smell without demonstrating its consequence in the reviewed change.
+Apply this Fowler smell baseline to every Standards pass, even when the repository documents no
+coding standards. Paste the full baseline into the Standards subagent prompt so that pass does
+not depend on context from the Spec axis.
 
-Investigate these signals:
+Two rules govern every baseline item:
 
-- **Mysterious name:** a name hides domain meaning, units, ownership, or side effects. Determine
-  whether the ambiguity can cause misuse or conceals a poorly separated responsibility.
-- **Duplicated code or knowledge:** the same logic or rule appears in multiple changed locations.
-  Determine whether the copies can drift or whether this change already updated them
-  inconsistently.
-- **Change amplification / shotgun surgery:** one rule requires coordinated edits in several
-  places. Determine whether knowledge is duplicated and whether an edit was missed.
-- **Divergent change / mixed responsibilities:** one module changes for unrelated reasons.
-  Determine whether the new behavior makes invariants or ownership harder to locate.
-- **Feature envy / misplaced responsibility:** code repeatedly reaches into another object's
-  data. Determine which component has the knowledge needed to enforce the rule.
-- **Data clumps / primitive obsession:** values that travel together or have domain constraints
-  are passed independently. Look for swapped values, inconsistent validation, and unit errors.
-- **Long method / deep conditionals:** do not use size alone. Look for mixed abstraction,
-  hidden state transitions, duplicated branches, or untestable failure paths.
-- **Message chains / middle man:** look for boundary leakage and change propagation, not a
-  mechanical preference for fewer calls.
-- **Repeated switches / parallel inheritance:** check whether adding one variant requires edits
-  to the same conditional in several places or across disconnected hierarchies, and whether the
-  closed-set assumption is real.
-- **Refused bequest:** check whether a subtype ignores or invalidates inherited behavior and can
-  therefore violate callers' substitutability assumptions; prefer composition when inheritance
-  does not express the actual contract.
-- **Global data / temporal coupling:** check hidden ordering, test interference, concurrency,
-  and lifecycle hazards.
-- **Speculative generality:** check whether extension points, factories, flags, or interfaces
-  have a current consumer and a demonstrated variation pressure.
+- **The repository overrides.** Suppress a smell when a documented repository standard endorses
+  the design. A higher-authority safety, requirement, or public-contract concern remains valid.
+- **Every smell is a judgement call.** Label it `possible <smell>`, never a hard violation. Skip
+  anything repository tooling reliably enforces unless the change bypasses that enforcement.
+  Demonstrate a concrete consequence in the reviewed change before reporting it.
 
-Recommend a refactoring only when it removes or contains a demonstrated risk. Require that
-behavior be preserved, the step be independently verifiable, and the proposed scope remain
-proportionate. Separate a required correction from an optional cleanup.
+The always-on baseline is:
+
+- **Mysterious Name** — a function, variable, or type whose name does not reveal what it does or
+  holds. Rename it; if no honest name emerges, clarify the underlying responsibility.
+- **Duplicated Code** — the same logic shape appears in more than one changed hunk or file.
+  Extract the shared shape and call it from both when the copies can drift.
+- **Feature Envy** — a method reaches into another object's data more than its own. Move the
+  behavior toward the component that owns the data and invariant.
+- **Data Clumps** — the same few fields or parameters keep travelling together. Bundle the
+  cohesive values into a domain type when that prevents inconsistent use.
+- **Primitive Obsession** — a primitive or string stands in for a constrained domain concept.
+  Give the concept a small type when it centralizes validation, units, or meaning.
+- **Repeated Switches** — the same switch or conditional cascade on the same type recurs across
+  the change. Centralize the mapping or use polymorphism when adding a variant otherwise requires
+  coordinated edits.
+- **Shotgun Surgery** — one logical change forces scattered edits across many files. Gather the
+  knowledge that changes together into one module or boundary.
+- **Divergent Change** — one file or module is edited for several unrelated reasons. Split
+  responsibilities so each module changes for one coherent reason.
+- **Speculative Generality** — abstractions, parameters, hooks, flags, or factories are added for
+  needs the governing spec does not establish. Delete or inline them until a real variation
+  pressure exists.
+- **Message Chains** — a caller navigates a long chain such as `a.b().c().d()` and therefore
+  depends on intermediate structure. Hide the traversal behind an operation on the owning
+  boundary.
+- **Middle Man** — a class or function mostly delegates without owning policy, translation, or a
+  useful boundary. Remove it and call the real target directly.
+- **Refused Bequest** — a subtype ignores or invalidates substantial inherited behavior. Replace
+  inheritance with composition when the subtype cannot honor callers' contract.
+
+Also investigate long methods, deep conditionals, global mutable data, temporal coupling, and
+parallel inheritance when the change makes state transitions, ownership, concurrency, or
+variation unsafe. These are additional architecture signals, not part of the fixed baseline.
+
+Recommend a refactoring only when it removes or contains a demonstrated risk. Require
+behavior preservation, independent verification, and proportionate scope. Separate a required
+correction from optional cleanup.
 
 ## 6. Legacy-code changes
 
