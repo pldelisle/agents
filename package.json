@@ -1,0 +1,31 @@
+{
+  "name": "@pldelisle/agent-skills",
+  "version": "1.0.0",
+  "description": "Configurable installer for Codex, Claude Code, and Kiro agent skills",
+  "type": "module",
+  "bin": {
+    "agent-skills": "bin/agent-skills.js"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "dist/",
+    "agent-skills.schema.json",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "make dist",
+    "prepare": "make dist",
+    "test": "make test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "agent-skills",
+    "codex",
+    "claude",
+    "kiro",
+    "npx"
+  ]
+}

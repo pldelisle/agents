@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/pldelisle/agents/main/agent-skills.schema.json",
+  "title": "Agent skills installer configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "runtimes": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "codex",
+          "claude",
+          "kiro"
+        ]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "tracker": {
+      "enum": [
+        "linear",
+        "jira"
+      ]
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "scope": {
+      "enum": [
+        "project",
+        "user"
+      ]
+    },
+    "target": {
+      "type": "string",
+      "minLength": 1
+    },
+    "force": {
+      "type": "boolean"
+    }
+  }
+}

@@ -3,6 +3,7 @@ set -euo pipefail
 
 repository_root="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
 source_skills="$repository_root/skills/source"
+output_root="${SKILLS_OUTPUT_ROOT:-}"
 
 usage() {
   cat <<'EOF'
@@ -19,6 +20,17 @@ materialize() {
   rm -rf "$target"
   mkdir -p "$(dirname "$target")"
   cp -R "$source_skills" "$target"
+}
+
+runtime_target() {
+  local runtime="$1"
+  local tracker="$2"
+
+  if [[ -n "$output_root" ]]; then
+    printf '%s/%s/%s/skills\n' "$output_root" "$runtime" "$tracker"
+  else
+    printf '%s/.%s/skills\n' "$repository_root" "$runtime"
+  fi
 }
 
 adapt_jira() {
@@ -50,7 +62,8 @@ adapt_claude() {
 
 build_codex() {
   local tracker="$1"
-  local target="$repository_root/.codex/skills"
+  local target
+  target="$(runtime_target codex "$tracker")"
   materialize "$target"
   if [[ "$tracker" == jira ]]; then
     adapt_jira "$target"
@@ -59,7 +72,8 @@ build_codex() {
 
 build_claude() {
   local tracker="$1"
-  local target="$repository_root/.claude/skills"
+  local target
+  target="$(runtime_target claude "$tracker")"
   materialize "$target"
   if [[ "$tracker" == jira ]]; then
     adapt_jira "$target"
@@ -78,7 +92,8 @@ adapt_kiro() {
 
 build_kiro() {
   local tracker="$1"
-  local target="$repository_root/.kiro/skills"
+  local target
+  target="$(runtime_target kiro "$tracker")"
   materialize "$target"
   if [[ "$tracker" == jira ]]; then
     adapt_jira "$target"
