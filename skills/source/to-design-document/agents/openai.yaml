@@ -1,4 +1,4 @@
 interface:
   display_name: "To Design Document"
-  short_description: "Produce test-first implementation-ready designs"
-  default_prompt: "Use $to-design-document to turn these approved requirements into a concise, human-reviewable design and TDD handoff."
+  short_description: "Create risk-proportionate implementation-ready designs"
+  default_prompt: "Use $to-design-document to decide whether these approved requirements need a design and create the smallest reviewable one if they do."

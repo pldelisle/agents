@@ -97,9 +97,9 @@ convergence trigger, failure behavior, and user-visible consequence are known.
 
 ## 5. Refactoring diagnostics
 
-Apply this Fowler smell baseline to every Standards pass, even when the repository documents no
-coding standards. Paste the full baseline into the Standards subagent prompt so that pass does
-not depend on context from the Spec axis.
+Use this Fowler-inspired diagnostic vocabulary when the changed design presents a concrete
+readability, ownership, coupling, or change-safety concern. Do not scan every change for every
+named smell or paste the full list into an unrelated review prompt.
 
 Two rules govern every baseline item:
 
@@ -109,7 +109,7 @@ Two rules govern every baseline item:
   anything repository tooling reliably enforces unless the change bypasses that enforcement.
   Demonstrate a concrete consequence in the reviewed change before reporting it.
 
-The always-on baseline is:
+The diagnostic list is:
 
 - **Mysterious Name** — a function, variable, or type whose name does not reveal what it does or
   holds. Rename it; if no honest name emerges, clarify the underlying responsibility.

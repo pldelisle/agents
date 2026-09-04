@@ -1,6 +1,6 @@
 {
   "name": "@pldelisle/agent-skills",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Configurable installer for Codex, Claude Code, and Kiro agent skills",
   "type": "module",
   "bin": {
@@ -10,13 +10,18 @@
     "bin/",
     "lib/",
     "dist/",
+    "skills/catalog.json",
     "agent-skills.schema.json",
-    "README.md"
+    "README.md",
+    "LICENSE",
+    "NOTICE"
   ],
   "scripts": {
     "build": "make dist",
     "prepare": "make dist",
-    "test": "make test"
+    "test": "make test",
+    "validate": "node scripts/validate-skills.js",
+    "eval": "node scripts/run-skill-evals.js"
   },
   "engines": {
     "node": ">=20"
@@ -27,5 +32,6 @@
     "claude",
     "kiro",
     "npx"
-  ]
+  ],
+  "license": "MIT"
 }

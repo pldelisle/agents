@@ -1,297 +1,69 @@
 ---
-name: to-specs-pl
-description: Create or revise reviewable feature specifications for specification-driven development by translating a product-vision conversation or approved Product Vision & Strategy Brief into scoped behavior, requirements, rules, measurable quality attributes, acceptance examples, traceability, and change governance. Use after `$discuss-vision`, or when asked to turn product strategy, high-level capability intent, discovery findings, a PRD, or clarified product direction into a specification for Spec Kit, Kiro, spec-first, spec-anchored, or spec-as-source delivery. Do not use to decide product vision or priority, choose architecture, produce technical plans, implement-pl code, or approve the specification you authored.
+name: to-specs
+description: Create or revise a behavioral feature specification from approved product intent, discovery evidence, or a PRD. Use for spec-first delivery, requirements, rules, quality attributes, acceptance examples, traceability, and change governance. Do not decide product vision, backlog priority, architecture, implementation, or self-approval.
+metadata:
+  owner: "pldelisle"
+  version: "2.0.0"
+  last-verified: "2026-09-04"
+  verification-scope: "deterministic; behavioral suite requires external execution"
+  compatibility: "Codex, Claude Code, and Kiro"
 ---
 
 # To Specs
 
-## Mission
+## Outcome and boundary
 
-Turn agreed product direction into the smallest precise specification that lets a
-reviewer distinguish correct from incorrect behavior without choosing an
-implementation.
+Produce a reviewable specification that defines observable behavior precisely enough for product, engineering, and quality roles to challenge it without prescribing implementation.
 
-Keep the artifact boundaries explicit:
+The approved product source owns why and strategic intent. This skill owns the cross-story behavioral contract. `$apply-product-ownership` owns slices, exact backlog order, and readiness; `$to-design-document` owns technical decisions; implementation and independent review remain separate.
 
-- The product-vision source owns why this matters, for whom, intended outcomes,
-  strategic constraints, and non-goals.
-- The feature specification owns externally observable behavior, rules,
-  qualities, examples, and intent-level change control.
-- The design document owns architecture, interfaces, data design, migrations,
-  implementation risks, and the verification design.
-- A named human authority approves the specification. Never approve a
-  specification you authored.
+Do not author missing product decisions silently. Label facts, source decisions, assumptions, hypotheses, conflicts, and open questions. An authored specification is `Draft` or `In review` until an authorized reviewer approves its exact revision.
 
-Read [specification-method.md](references/specification-method.md) completely
-before substantive specification work. Read
-[feature-specification-template.md](references/feature-specification-template.md)
-completely before creating or materially revising an artifact. Follow stronger
-repository conventions when they exist.
+Read [specification-method.md](references/specification-method.md) for non-trivial state, rule, example, traceability, or change-governance work. Read [feature-specification-template.md](references/feature-specification-template.md) before creating or materially restructuring the durable artifact.
 
-## Non-negotiable rules
+## Choose proportionate formality
 
-1. **Preserve upstream intent.** Trace every requirement to an agreed outcome,
-   constraint, decision, risk, or source. Surface conflicts instead of silently
-   rewriting the vision.
-2. **Do not manufacture authority.** A conversation, draft brief, scenario
-   probe, roadmap option, or high-level specification is not approved merely
-   because it exists. Record its status and exact revision.
-3. **Specify behavior, not design.** State actors, triggers, permissions,
-   states, rules, outcomes, failure behavior, and measurable qualities. Leave
-   architecture, libraries, schemas, file paths, tasks, and implementation
-   sequence downstream.
-4. **Discover the local substrate.** Reuse repository instructions, Spec Kit,
-   `.specify/`, `.kiro/specs/`, contract conventions, identifiers, templates,
-   and artifact locations. Do not initialize or replace a framework unless the
-   user authorizes it.
-5. **Ground brownfield specifications.** Inspect current behavior, contracts,
-   tests, and operational evidence when available. State what changes and what
-   must remain unchanged.
-6. **Separate epistemic states.** Label facts, interpretations, assumptions,
-   hypotheses, decisions, constraints, and open questions. Never convert a
-   plausible guess into a requirement.
-7. **Use stable identities.** Give requirements, rules, quality attributes,
-   examples, decisions, and open questions searchable identifiers. Preserve
-   existing repository conventions.
-8. **Use discriminating examples.** Cover relevant success, boundary,
-   permission, state, failure, recovery, and negative-space behavior. Examples
-   illustrate rules; they do not replace them.
-9. **Make qualities measurable.** Include performance, reliability, security,
-   privacy, accessibility, compatibility, or operational qualities only when
-   relevant, and give each an observable threshold or evaluation method.
-10. **Scale detail to risk.** Prefer one coherent specification per independently
-    reviewable behavior boundary. Use a compact delta for a local defect and
-    stronger controls for consequential or long-lived behavior.
-11. **Do not self-approve.** `READY FOR REVIEW` is an author assessment.
-    `APPROVED` requires a named human authority and the exact approved revision.
-12. **Do not expand the task.** Creating a specification does not authorize
-    technical design, code, tests, deployment, or other external writes.
+- **Exploratory:** The main need is learning. Define the hypothesis, experiment or prototype, observation, and decision threshold; do not pretend behavior is settled.
+- **Lightweight:** A clear, reversible, low-risk change may need only a concise behavior note with source, scope, examples, and verification.
+- **Standard:** A multi-path feature needs stable rule and example identifiers, a behavioral model, quality attributes, and review status.
+- **High assurance:** Safety, authorization, regulated data, money, migration, irreversible state, or broad compatibility requires explicit hazards, failure behavior, traceability, verification method, and controlled revisions.
 
-## Status model
-
-Use repository-defined states when they are stronger. Otherwise use:
-
-- `DRAFT`: the artifact is being clarified or written.
-- `BLOCKED`: authority, evidence, or a material intent decision is missing.
-- `READY FOR REVIEW`: author checks pass; human review is pending.
-- `APPROVED`: a named human approved this exact revision.
-- `SUPERSEDED`: a later revision replaced this artifact.
-
-Any material change to approved intent returns the new revision to
-`READY FOR REVIEW` until it is approved.
+Use the least ceremony that preserves shared understanding and change safety. If a full feature specification would add no useful decision or contract, say so and recommend the lighter artifact.
 
 ## Workflow
 
-### 1. Resolve sources, authority, and conventions
+1. **Resolve authority.** Identify the approved product source, decision owner, revisions, status, and repository conventions. Surface conflicts rather than choosing silently.
+2. **Build the intent packet.** Capture target user, problem, desired outcome, evidence, product hypothesis, success measure, guardrails, scope boundaries, non-goals, and terms.
+3. **Characterize the baseline.** Inspect current product behavior, public contracts, existing specifications, tests, schemas, interfaces, and relevant issues. Treat implementation as evidence, not intended behavior by default.
+4. **Define the behavioral boundary.** Name actors, system boundary, inputs, outputs, externally visible state, permissions, dependencies, and excluded behavior.
+5. **Clarify material intent.** Ask one to three related questions only where different answers would change observable behavior. Offer a recommendation and identify the evidence or assumption behind it.
+6. **Model behavior.** Define states, events, business rules, permissions, invariants, failure and recovery behavior, external-dependency behavior, and applicable quality attributes.
+7. **Derive rules and examples.** Give each material rule and acceptance example a stable identifier. Use scenarios for event-driven behavior, decision tables for combinatorial rules, and measurable statements for static qualities.
+8. **Challenge the draft.** Test happy, alternate, invalid, boundary, empty, duplicate, stale, permission, concurrency, partial-failure, retry, migration, compatibility, accessibility, privacy, and operational cases only where relevant.
+9. **Establish traceability.** Preserve `source decision → outcome hypothesis → requirement or rule → acceptance example → planned verification`. Reference shared rules from backlog items rather than copying them.
+10. **Persist and gate.** When a durable artifact is requested, use the repository path and template. Remove unused sections. Record revision, status, approver, changes, unresolved questions, and affected identifiers.
 
-Read the relevant conversation, Product Vision & Strategy Brief, selected
-high-level specifications, strategic decisions, evidence register, glossary or
-context map, roadmap decisions, and repository instructions.
+## Requirement quality
 
-Determine:
+Each normative requirement should be necessary, singular, concise, unambiguous in the product language, consistent, feasible at the product level, verifiable, and traceable. Replace adjectives such as “fast,” “secure,” “easy,” or “robust” with thresholds, constraints, or an explicit evaluation method when the quality matters.
 
-- the exact strategic source and revision;
-- whether that source is proposed, selected, or approved;
-- the selected capability, product context, target actor, and intended outcome;
-- the accountable decision authority and required reviewers;
-- the repository's specification location, template, identifier, authority,
-  persistence, status, and approval conventions;
-- whether the behavior is greenfield, a brownfield change, a defect correction,
-  or an exploratory experiment.
+Keep rationale separate from normative behavior. Record genuine externally imposed technical constraints, but do not select architecture, libraries, schemas, endpoints, classes, or task sequences.
 
-If the only source is the preceding `$discuss-vision` conversation, reconstruct
-the decision packet from explicit agreements. Cite the conversation context and
-mark unresolved or unapproved claims. Do not invent a formal brief or approval.
+Non-functional requirements deserve explicit treatment when relevant. State the scenario, measure, threshold or evaluation method, operating conditions, and consequence. Avoid generic quality checklists and unmeasurable aspirations.
 
-### 2. Build the upstream decision packet
+## Author gate
 
-Extract only decision-bearing input:
+Before handoff, confirm:
 
-- vision, strategic outcome, selected high-level specification, and rationale;
-- target segment, actor, circumstance, job, pain, or opportunity;
-- desired user and business outcomes, measures, and guardrails;
-- scope boundaries, non-goals, product constraints, and commitments;
-- canonical terms, context boundaries, lifecycle meanings, and avoided aliases;
-- evidence, confidence, assumptions, risks, unknowns, and decision gates;
-- constructed scenario probes and durable decisions that affect behavior.
+- the source and exact revision are identified;
+- scope, non-goals, terms, actors, states, rules, and examples are internally consistent;
+- every normative item has a stable identifier and source trace;
+- every rule has acceptance evidence and every example maps to planned verification;
+- material quality attributes and failure behavior are measurable;
+- assumptions and open questions have owners and consequences;
+- implementation choices remain open unless an approved external constraint closes them; and
+- the artifact does not claim approval it did not receive.
 
-Record contradictions and missing links. A scenario probe is clarification
-input, not research evidence or an acceptance example until the intended
-behavior is explicitly decided.
+## Completion and handoff
 
-If several high-level specifications are selected, identify the smallest
-coherent specification boundaries and shared constraints. Do not invent
-delivery order, estimates, or technical decomposition.
-
-### 3. Establish the behavioral baseline and boundary
-
-For brownfield work, inspect relevant source, tests, public contracts,
-documentation, and runtime evidence. Record current observable behavior and
-behavior that must remain unchanged. Treat current implementation as evidence,
-not automatic authority.
-
-Define:
-
-- actors and permissions;
-- entry and exit conditions;
-- included workflows, states, and product-context boundaries;
-- explicitly excluded behavior;
-- external dependencies and user-visible compatibility constraints;
-- assumptions that must be validated before approval.
-
-Split an artifact when its parts have different authorities, independent
-lifecycles, contradictory terminology, or cannot be reviewed as one coherent
-behavior contract.
-
-### 4. Clarify material intent
-
-Ask only questions whose answers can change observable behavior, scope, safety,
-compatibility, cost, or the meaning of a requirement. Ask one to three related
-questions at a time and explain the consequence of leaving each unresolved.
-
-Resolve ambiguity with concrete cases:
-
-- Who may act, and under which state or precondition?
-- What event occurs and what is observable afterward?
-- What must never happen?
-- What happens at boundaries, on repetition, or with stale or missing data?
-- What happens on partial failure, timeout, retry, recovery, or cancellation?
-- Which terms or states have different meanings across product contexts?
-
-Encode accepted answers in the specification and decision record. A material
-unresolved answer makes the artifact `BLOCKED`; do not hide it in prose.
-
-### 5. Write the behavior model
-
-Use the bundled template selectively. Include:
-
-- strategic trace, evidence, desired outcome, measures, and guardrails;
-- scope, non-goals, baseline, and unchanged behavior;
-- actors, permissions, glossary, and relevant context translations;
-- user journeys, workflows, states, transitions, invariants, and failure paths;
-- singular requirements and behavioral rules;
-- acceptance examples and forbidden side effects;
-- applicable measurable quality attributes;
-- data use, privacy, policy, accessibility, compatibility, external-system,
-  audit, and operational obligations when relevant;
-- assumptions, decisions, dependencies, risks, and open questions;
-- governance, revision, approval state, supersession, and change protocol.
-
-Describe what must be observable. Preserve a mandated technology only when the
-upstream authority genuinely requires it; record its source and rationale as a
-constraint.
-
-### 6. Derive requirements, rules, and examples
-
-Create the chain:
-
-```text
-Strategic source -> Outcome / constraint -> Requirement
-                 -> Rule or quality attribute -> Acceptance example
-```
-
-For each requirement:
-
-1. Make it necessary, singular, unambiguous, consistent, feasible,
-   implementation-independent, and verifiable.
-2. Name the actor or system, trigger or precondition, and observable response
-   where applicable.
-3. Separate rationale from the normative obligation.
-4. Link it to its upstream authority and relevant evidence or risk.
-5. Add the smallest set of examples that distinguishes the intended rule from
-   plausible misinterpretations.
-
-Use precise prose for simple rules, EARS clauses for conditional requirements,
-Given/When/Then for event examples, decision tables for interacting
-conditions, and state models when legal transitions matter. Do not force one
-notation onto every requirement.
-
-### 7. Challenge the draft
-
-Check the draft as a set, not only sentence by sentence. Seek independent domain,
-engineering, quality, security, legal, operations, or accessibility challenge
-in proportion to risk. Reviewers may expose ambiguity, infeasibility, current
-system facts, missing cases, and unverifiable outcomes; they do not silently
-choose the intended behavior.
-
-For every material finding, record:
-
-- the finding and evidence;
-- the affected identifiers;
-- the intent consequence;
-- the decision authority;
-- the resolution, deferral, or blocking question.
-
-Reconcile accepted findings into the governing sections and revision. Do not
-leave binding decisions only in comments or conversation history.
-
-### 8. Establish traceability and change control
-
-Maintain semantic links in both directions. An identifier mention alone does
-not prove coverage. Mark links `covered`, `partial`, `contradicted`, `blocked`,
-or `not applicable` with a short rationale.
-
-Define:
-
-- who may approve intent changes;
-- whether the specification is spec-first, spec-anchored, or spec-as-source;
-- whether changes use living, flow-forward, or flow-back persistence;
-- when to increment or supersede a revision;
-- which designs, contracts, verification assets, or implementations require
-  impact analysis after a change;
-- which evidence must be rerun before reapproval.
-
-### 9. Persist and run the author gate
-
-When the request calls for a repository artifact, write it at the
-repository-conventional location. Otherwise return the draft in the response.
-Remove template instructions and empty optional sections. Link to authoritative
-evidence rather than copying material that will drift.
-
-Set `READY FOR REVIEW` only when:
-
-- the exact upstream authority, revision, status, outcome, scope, and non-goals
-  are explicit;
-- facts, assumptions, decisions, constraints, and open questions are distinct;
-- terminology, actors, permissions, states, rules, failures, and unchanged
-  behavior are coherent;
-- requirements and examples are necessary, precise, observable, and free of
-  incidental implementation;
-- relevant quality, data, external, compatibility, and operational obligations
-  are measurable;
-- every in-scope requirement traces upstream and every rule, quality attribute,
-  and example traces to a requirement;
-- contradictions are resolved at the artifact that owns them;
-- no material intent question or unreviewed assumption remains;
-- revision, status, decision authority, reviewers, lineage, and change protocol
-  are recorded.
-
-If any check fails, fix it or set `BLOCKED` with the exact missing decision,
-evidence, or authority.
-
-### 10. Hand off to technical design
-
-After human approval, hand the exact approved specification revision to
-`$to-design-document`. Include the artifact path, scope, requirement and example
-identifiers, applicable quality attributes, current-behavior evidence, known
-constraints, unresolved non-blocking risks, and required change protocol.
-
-Ask the design author to return any product ambiguity instead of resolving it
-as architecture. A downstream discovery that changes intended behavior requires
-a new specification revision and impact analysis before affected work proceeds.
-
-## Completion report
-
-Lead with the artifact status. Report:
-
-- specification path or in-response location, identifier, revision, and status;
-- upstream source, exact revision, selected high-level specification, and
-  approval state;
-- behavior boundary, material decisions, and explicit non-goals;
-- counts of requirements, rules, quality attributes, and acceptance examples;
-- forward and backward traceability status;
-- reviewers or challenges completed and their material outcomes;
-- blockers, assumptions, risks, and the next human decision;
-- whether the artifact is ready to hand to `$to-design-document`.
-
-Do not describe `READY FOR REVIEW` as approved or implementation-ready.
+Return the artifact or path, revision and status, source decisions, requirement-to-example trace, unresolved blockers, and recommended review owner. Hand the approved feature contract to `$apply-product-ownership` for slicing and ordering, and to `$to-design-document` only when the change's risk or architectural uncertainty warrants technical design.

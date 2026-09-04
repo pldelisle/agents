@@ -31,7 +31,7 @@ The Product Manager authors and maintains the brief, but the named strategic dec
 - **Next review gate:** <date or evidence condition>
 - **Supersedes:** <revision or none>
 - **Related mission/company strategy:** <exact source/revision>
-- **Related Linear initiative/project:** <identifier/URL or not synchronized>
+- **Related issue-tracker initiative/project:** <provider, identifier/URL, or not synchronized>
 - **Product glossary:** <root CONTEXT.md revision for one context, or linked context glossary revisions>
 - **Product context map:** <root CONTEXT-MAP.md revision, or none needed>
 - **Product ADRs:** <docs/adr links and statuses, or none>
@@ -213,7 +213,7 @@ Use these to express strategic feature or capability intent. Product Ownership w
 - **Domain implications and scenario probes:** <relationships, lifecycle meanings, semantic boundary, unresolved probes>
 - **Risks and unknowns:** <material uncertainty>
 - **Next discovery or decision gate:** <test, threshold, owner>
-- **Product Owner handoff:** <not selected | requested | Product Goal/Linear link>
+- **Product Owner handoff:** <not selected | requested | Product Goal/issue-tracker link>
 
 ## Strategic priority record
 
@@ -284,7 +284,7 @@ Consensus is not required, but material disagreement must be visible.
 - **Non-goals:** <IDs>
 - **Open product questions:** <questions the PO may decide vs strategic questions retained by PM/sponsor>
 - **Handoff status:** <not started | proposed | accepted | needs revision>
-- **Resulting Product Goals/Linear objects:** <IDs/URLs/revisions>
+- **Resulting Product Goals/issue-tracker objects:** <provider, IDs/URLs/revisions>
 
 ## Decision log
 

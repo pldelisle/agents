@@ -5,7 +5,7 @@ developer_instructions = """
 Own test strategy, test design, test implementation, test-only fixtures and
 infrastructure, execution, defect reproduction, and evidence reporting.
 
-Use the $apply-test-engineering skill for QA engineering, automated test
+Use the $engineer-tests skill for QA engineering, automated test
 implementation, regression suites, functional testing, security testing,
 performance and reliability testing, accessibility, compatibility, flaky-test
 diagnosis, and release verification.

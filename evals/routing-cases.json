@@ -1,0 +1,321 @@
+{
+  "schemaVersion": 1,
+  "instructions": "Run each prompt repeatedly in a clean context with the full catalog installed. Positive cases should select the named skill, near-miss cases should not, and ambiguous cases should follow their expected routing without loading every plausible skill.",
+  "skills": [
+    {
+      "skill": "discuss-vision",
+      "positive": [
+        "Use $discuss-vision to grill me one decision at a time about the future of our invoicing product.",
+        "Use $discuss-vision to decide which customer segment our product should serve over the next three years.",
+        "Use $discuss-vision to develop an evidence-backed product vision from these interview notes and market constraints.",
+        "Use $discuss-vision to clarify our value proposition and the strategic choices behind it.",
+        "Use $discuss-vision to compare three materially different product futures and recommend one.",
+        "Use $discuss-vision to define an outcome-based roadmap with learning horizons rather than feature dates.",
+        "Use $discuss-vision because our teams use the word workspace differently; clarify the product-facing terminology and contexts.",
+        "Use $discuss-vision to challenge whether this capability belongs in our product strategy and state what evidence would change the answer."
+      ],
+      "nearMiss": [
+        "Write acceptance criteria for the account recovery story.",
+        "Order these five backlog tickets for the current Product Goal.",
+        "Design the service boundary for the new billing integration.",
+        "Implement the approved account deletion behavior.",
+        "Review this branch for security and correctness.",
+        "Add integration tests for the webhook retry path.",
+        "Create a technical domain model from these database tables.",
+        "Turn this approved vision brief into a detailed behavioral feature specification."
+      ],
+      "ambiguous": [
+        {
+          "prompt": "Use $discuss-vision: we have only a feature idea and no agreed target user; help define what it should become.",
+          "expected": ["discuss-vision"],
+          "reason": "Strategic intent is unresolved, so vision work precedes specification."
+        },
+        {
+          "prompt": "Use $discuss-vision to decide whether offline mode is a roadmap bet or a backlog story.",
+          "expected": ["discuss-vision"],
+          "reason": "Resolve strategic level and outcome before backlog decomposition."
+        },
+        {
+          "prompt": "Use $discuss-vision: tenant appears in marketing and code with different meanings; help resolve the product meaning.",
+          "expected": ["discuss-vision"],
+          "reason": "The requested meaning is product-facing, not technical modeling."
+        },
+        {
+          "prompt": "Use $discuss-vision to recommend a new market direction and identify technical feasibility questions for engineering.",
+          "expected": ["discuss-vision"],
+          "reason": "Product strategy owns the recommendation while engineering receives a bounded handoff."
+        }
+      ]
+    },
+    {
+      "skill": "to-specs",
+      "positive": [
+        "Turn this approved vision brief into a behavioral feature specification.",
+        "Write traceable requirements and acceptance examples for organization invitations.",
+        "Revise this feature spec to cover permissions, retries, and stale invitations.",
+        "Convert the PRD into implementation-free rules and observable scenarios.",
+        "Create a spec-first contract for the new export workflow.",
+        "Define measurable quality attributes for this approved real-time collaboration capability.",
+        "Build a requirement-to-example trace for the subscription pause feature.",
+        "Resolve contradictions between these approved behavior documents and produce one revisioned specification."
+      ],
+      "nearMiss": [
+        "Help decide the target market and product vision.",
+        "Split this feature into ordered Jira stories.",
+        "Choose the database and API architecture for the approved feature.",
+        "Implement the new export workflow.",
+        "Add tests for every acceptance example in this existing spec.",
+        "Independently review whether the branch matches its specification.",
+        "Approve the specification you just wrote.",
+        "Fix this obvious one-line null check and run its existing test."
+      ],
+      "ambiguous": [
+        {
+          "prompt": "We know the desired outcome but disagree about user-visible failure behavior.",
+          "expected": ["to-specs"],
+          "reason": "The unresolved question changes the behavioral contract."
+        },
+        {
+          "prompt": "Document this tiny copy change so engineering knows the exact result.",
+          "expected": ["to-specs"],
+          "reason": "Use the lightweight specification lane rather than a full template."
+        },
+        {
+          "prompt": "Describe what the API consumer observes, but leave protocol and storage choices open.",
+          "expected": ["to-specs"],
+          "reason": "This is an external behavior contract, not technical design."
+        },
+        {
+          "prompt": "The product direction is approved; make the shared rules stable before we create stories.",
+          "expected": ["to-specs"],
+          "reason": "Shared cross-story rules belong to the feature specification."
+        }
+      ]
+    },
+    {
+      "skill": "apply-product-ownership",
+      "positive": [
+        "Use $apply-product-ownership to refine and order these backlog items.",
+        "Use $apply-product-ownership to define a Product Goal for the next coherent delivery horizon.",
+        "Use $apply-product-ownership to split this epic into thin vertical stories with acceptance examples.",
+        "Use $apply-product-ownership to determine whether this story is Ready and name the missing evidence.",
+        "Use $apply-product-ownership to synchronize the approved story revision to Linear after showing me the proposed changes.",
+        "Use $apply-product-ownership to find duplicate Jira issues and propose which one should remain canonical.",
+        "Use $apply-product-ownership to build an engineering-validated dependency graph and delivery-wave plan for these Ready items.",
+        "Use $apply-product-ownership to reorder this backlog using customer outcome, learning value, risk, urgency, and dependencies."
+      ],
+      "nearMiss": [
+        "Choose which customer segment our company should enter.",
+        "Write the shared behavioral specification for this whole feature.",
+        "Select the architecture and migration strategy.",
+        "Estimate these stories in points for the developers.",
+        "Implement the highest-priority ticket.",
+        "Write a regression test for the top backlog item.",
+        "Review the completed change against repository standards.",
+        "Move every issue to Done without showing me what will change."
+      ],
+      "ambiguous": [
+        {
+          "prompt": "Use $apply-product-ownership: the feature rules exist; turn them into delivery-sized slices and preserve their IDs.",
+          "expected": ["apply-product-ownership"],
+          "reason": "The feature contract is stable and the requested work is backlog decomposition."
+        },
+        {
+          "prompt": "Use $apply-product-ownership to write a learning spike because feasibility is unknown.",
+          "expected": ["apply-product-ownership"],
+          "reason": "Product Ownership can frame a learning item without inventing feasibility."
+        },
+        {
+          "prompt": "Use $apply-product-ownership to plan parallel delivery but do not start any implementation.",
+          "expected": ["apply-product-ownership"],
+          "reason": "Planning mode is authorized while dispatch remains forbidden."
+        },
+        {
+          "prompt": "Use $apply-product-ownership: this low-risk issue was reviewed by a human engineer; decide if further agent refinement is necessary.",
+          "expected": ["apply-product-ownership"],
+          "reason": "Readiness accepts equivalent evidence proportionate to risk."
+        }
+      ]
+    },
+    {
+      "skill": "to-design-document",
+      "positive": [
+        "Create an implementation-ready design for this approved cross-service migration.",
+        "Compare architecture options for the new authorization boundary and recommend one.",
+        "Write a technical design with contracts, failure handling, rollout, rollback, and tests.",
+        "Turn these approved requirements into a design-to-TDD handoff.",
+        "Revise the design document after the persistence contract changed.",
+        "Plan a backward-compatible schema migration across two deployed versions.",
+        "Define the adapter boundary for supporting both Linear and Jira providers.",
+        "Determine whether this risky refactor is technically ready for human approval."
+      ],
+      "nearMiss": [
+        "Decide what customer problem this product should solve.",
+        "Write user-visible acceptance rules for the feature.",
+        "Order the backlog for the next Product Goal.",
+        "Implement the already approved design.",
+        "Write only the tests described by this design.",
+        "Independently review the implementation for merge readiness.",
+        "Approve the design document you authored.",
+        "Fix the spelling error in this local constant."
+      ],
+      "ambiguous": [
+        {
+          "prompt": "Tell me whether this one-line reversible change needs a design document.",
+          "expected": ["to-design-document"],
+          "reason": "The skill should return a no-design-needed gate decision, not manufacture a document."
+        },
+        {
+          "prompt": "Requirements are approved, but we have three viable persistence strategies.",
+          "expected": ["to-design-document"],
+          "reason": "A consequential technical choice remains."
+        },
+        {
+          "prompt": "Define how we will prove the migration without choosing new product behavior.",
+          "expected": ["to-design-document"],
+          "reason": "Verification design for a technical migration belongs in the design."
+        },
+        {
+          "prompt": "Prototype two technical seams to answer which design is safer.",
+          "expected": ["to-design-document"],
+          "reason": "The prototype answers an explicit design uncertainty."
+        }
+      ]
+    },
+    {
+      "skill": "implement",
+      "positive": [
+        "Implement the approved invitation expiry behavior and verify it.",
+        "Fix the crash when an empty configuration file is loaded.",
+        "Refactor this parser to remove the evidenced quadratic path without changing behavior.",
+        "Add the production endpoint described by this approved design.",
+        "Update the migration implementation and preserve backward compatibility.",
+        "Debug why the retry state never clears and apply the smallest fix.",
+        "Replace the provider-specific branch with the approved adapter boundary.",
+        "Make this source-code change and run the repository checks."
+      ],
+      "nearMiss": [
+        "Write only regression tests for the invitation workflow.",
+        "Review this branch independently and do not edit it.",
+        "Create a technical design before any code changes.",
+        "Define the target customer and product strategy.",
+        "Refine and order the backlog items.",
+        "Turn the PRD into acceptance examples.",
+        "Estimate how long the developers will need.",
+        "Explain the current implementation without changing anything."
+      ],
+      "ambiguous": [
+        {
+          "prompt": "Fix the bug and add the regression test that proves it.",
+          "expected": ["implement"],
+          "reason": "The requested outcome includes a production fix; tests are part of verification."
+        },
+        {
+          "prompt": "This clear low-risk change has no design document; implement it safely.",
+          "expected": ["implement"],
+          "reason": "Low-risk implementation does not require manufactured ceremony."
+        },
+        {
+          "prompt": "Improve this module boundary while implementing the requested behavior.",
+          "expected": ["implement"],
+          "reason": "Architecture work is local to an authorized implementation."
+        },
+        {
+          "prompt": "The requirement is ambiguous in a way that changes user behavior; start coding.",
+          "expected": ["implement"],
+          "reason": "The skill should surface and stop on the product ambiguity rather than guess."
+        }
+      ]
+    },
+    {
+      "skill": "engineer-tests",
+      "positive": [
+        "Add regression tests for the webhook retry defect without changing production code.",
+        "Design a risk-based test strategy for the new authorization model.",
+        "Diagnose and repair this flaky integration test.",
+        "Measure whether the current tests detect mutations in the pricing rules.",
+        "Create a bounded load test for the isolated staging environment.",
+        "Add accessibility and compatibility checks for the new dialog.",
+        "Build deterministic fixtures for the state-machine tests.",
+        "Run release verification and report the limits of the evidence."
+      ],
+      "nearMiss": [
+        "Fix the production retry defect.",
+        "Independently review the full branch for merge readiness.",
+        "Decide the product's target reliability objective.",
+        "Write feature acceptance criteria from the PRD.",
+        "Choose the production architecture for testability.",
+        "Order the backlog by quality risk.",
+        "Weaken this assertion until the build becomes green.",
+        "Run a denial-of-service test against the public production endpoint."
+      ],
+      "ambiguous": [
+        {
+          "prompt": "Reproduce the defect with a failing test, but leave the production fix to engineering.",
+          "expected": ["engineer-tests"],
+          "reason": "The authorized scope is test-only reproduction."
+        },
+        {
+          "prompt": "The legacy seam cannot support a reliable unit test; design compensating evidence.",
+          "expected": ["engineer-tests"],
+          "reason": "The skill defines a test-first exception path."
+        },
+        {
+          "prompt": "Assess whether 90 percent coverage gives enough release confidence.",
+          "expected": ["engineer-tests"],
+          "reason": "Coverage must be interpreted against risk and fault detection."
+        },
+        {
+          "prompt": "Test the migration's behavior across old and new deployed versions.",
+          "expected": ["engineer-tests"],
+          "reason": "The request is execution of compatibility evidence, not design selection."
+        }
+      ]
+    },
+    {
+      "skill": "code-review",
+      "positive": [
+        "Use $code-review to review this branch against its spec and repository standards.",
+        "Use $code-review to perform a pre-merge security review of the authentication change.",
+        "Use $code-review to review the migration for data-loss and rollback risks without editing it.",
+        "Use $code-review to check whether this implementation conforms to the approved design.",
+        "Use $code-review to review the dependency update for supply-chain and compatibility risk.",
+        "Use $code-review to assess this work-in-progress diff and report only actionable defects.",
+        "Use $code-review to re-review the fix for the prior high-severity finding.",
+        "Use $code-review to independently review this technical design for approval readiness."
+      ],
+      "nearMiss": [
+        "Implement the fix for the reviewer comments.",
+        "Write tests for the changed authorization behavior.",
+        "Create the technical design for this migration.",
+        "Decide what the product requirements should be.",
+        "Refine the related backlog story.",
+        "Summarize the code without judging it.",
+        "Approve this change because the author says all tests pass.",
+        "Review every unrelated legacy problem in the repository."
+      ],
+      "ambiguous": [
+        {
+          "prompt": "Use $code-review to review the change even though no governing spec exists.",
+          "expected": ["code-review"],
+          "reason": "Perform Standards review and disclose that Spec was not assessed."
+        },
+        {
+          "prompt": "Use $code-review to find defects now; I may ask you to fix them in a later request.",
+          "expected": ["code-review"],
+          "reason": "The current request remains read-only review."
+        },
+        {
+          "prompt": "Use $code-review to review this design document against the approved requirements.",
+          "expected": ["code-review"],
+          "reason": "Independent design review is distinct from authoring the design."
+        },
+        {
+          "prompt": "Use $code-review to persist the review in the repository using a safe filename.",
+          "expected": ["code-review"],
+          "reason": "Persistence is explicitly authorized and remains bounded."
+        }
+      ]
+    }
+  ]
+}

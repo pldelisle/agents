@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "owner": "pldelisle",
+  "lastVerified": "2026-09-04",
+  "verificationScope": "Deterministic source, build, installer, and package checks. Behavioral suites are defined but require an external model adapter and retained traces.",
+  "compatibility": {
+    "runtimes": ["codex", "claude", "kiro"],
+    "trackers": ["linear", "jira"]
+  },
+  "skills": [
+    {
+      "id": "apply-product-ownership",
+      "aliases": ["to-tickets"],
+      "version": "2.0.0",
+      "invocation": "explicit",
+      "outcome": "Refine, order, and safely synchronize a product backlog.",
+      "sideEffects": "May write local specifications, mutate an issue tracker, or dispatch delivery only when explicitly authorized."
+    },
+    {
+      "id": "code-review",
+      "aliases": [],
+      "version": "2.0.0",
+      "invocation": "explicit",
+      "outcome": "Independently assess a change against its specification and repository standards.",
+      "sideEffects": "Read-only by default; persists a review only when explicitly requested."
+    },
+    {
+      "id": "discuss-vision",
+      "aliases": [],
+      "version": "2.0.0",
+      "invocation": "explicit",
+      "outcome": "Clarify evidence-backed product vision, strategy, and shared product language.",
+      "sideEffects": "Conversation-only by default; writes product artifacts only when explicitly requested."
+    },
+    {
+      "id": "engineer-tests",
+      "aliases": ["apply-test-engineering"],
+      "version": "2.0.0",
+      "invocation": "automatic",
+      "outcome": "Create and execute risk-based software tests and report bounded evidence.",
+      "sideEffects": "May edit test-only files and execute tests within the authorized target."
+    },
+    {
+      "id": "implement",
+      "aliases": [],
+      "version": "2.0.0",
+      "invocation": "automatic",
+      "outcome": "Implement, debug, or refactor production code and verify the requested behavior.",
+      "sideEffects": "May edit source, tests, and documentation within the requested repository scope."
+    },
+    {
+      "id": "to-design-document",
+      "aliases": [],
+      "version": "2.0.0",
+      "invocation": "automatic",
+      "outcome": "Turn approved requirements into an implementation-ready technical design when risk warrants one.",
+      "sideEffects": "May create or revise a local design artifact within the requested scope."
+    },
+    {
+      "id": "to-specs",
+      "aliases": [],
+      "version": "2.0.0",
+      "invocation": "automatic",
+      "outcome": "Turn approved product intent into a traceable behavioral feature specification.",
+      "sideEffects": "May create or revise a local specification artifact within the requested scope."
+    }
+  ]
+}

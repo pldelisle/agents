@@ -1,0 +1,6 @@
+interface:
+  display_name: "Product Ownership"
+  short_description: "Refine and order an evidence-backed product backlog"
+  default_prompt: "Use $apply-product-ownership to refine and order this backlog without synchronizing external changes unless I authorize them."
+policy:
+  allow_implicit_invocation: false

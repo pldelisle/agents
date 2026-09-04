@@ -1,256 +1,65 @@
 ---
 name: to-design-document
-description: Create or revise concise, implementation-ready software design documents that turn approved requirements into reviewable technical decisions, exact change surfaces, contracts, risks, and a requirement-traced TDD test plan. Use as the final human-review gate before implementing a non-trivial feature, defect fix, refactor, migration, integration, or cross-cutting change; or when asked for a technical design, detailed design, implementation plan, test design, or design-to-TDD handoff. Do not use to discover product intent, implement-pl code, write tests, or independently review a completed change.
+description: Create or revise an implementation-ready technical design from approved requirements when risk, ambiguity, or cross-boundary change warrants a design gate. Use for architecture, migrations, integrations, contracts, technical planning, and requirement-traced test design. Do not discover product intent, implement code, write tests, or self-approve.
+metadata:
+  owner: "pldelisle"
+  version: "2.0.0"
+  last-verified: "2026-09-04"
+  verification-scope: "deterministic; behavioral suite requires external execution"
+  compatibility: "Codex, Claude Code, and Kiro"
 ---
 
 # To Design Document
 
-## Mission
+## Outcome and gate
 
-Produce the shortest design document that lets a competent implementer write the
-right tests and code without making a material product or technical decision.
-Make decisions reviewable before they become code. Treat tests as the primary
-executable handoff, not as an appendix.
+Produce the smallest reviewable design that resolves the technical decisions needed to implement an approved requirement safely and verify it convincingly.
 
-Keep these authorities separate:
+Do not require a design document for every change. A clear, local, reversible, low-risk edit should proceed directly to `$implement` with proportionate verification unless repository policy requires a gate. Recommend a design when the change crosses modules or systems, introduces a public contract, migration, concurrency, security or privacy boundary, irreversible state, significant operational risk, or a hard-to-reverse architectural choice.
 
-- The approved requirement source owns **what and why**.
-- The design document owns **how and how it will be proved**.
-- The implementation owns code and executed evidence.
-- A named human reviewer owns approval. Never approve the design you authored.
+This skill owns the proposed technical decision and test design, not product intent, implementation, approval, estimates, backlog order, or independent review. Mark the artifact `Draft`, `In review`, `Approved`, `Superseded`, or `Blocked`; only an authorized reviewer can set `Approved`.
 
-Follow repository instructions and an established design template when they are
-stronger. Otherwise, use
-[design-document-template.md](references/design-document-template.md). Read it
-completely before drafting. Read
-[test-design.md](references/test-design.md) completely before deriving tests.
-Read [foundations.md](references/foundations.md) only when adapting the method or
-explaining why a control exists.
-
-## Non-negotiable rules
-
-1. **Do not launder requirements.** Trace every externally observable behavior
-   to an approved source. Return a product ambiguity to its owner instead of
-   choosing a plausible answer in the design.
-2. **Ground the design in the repository.** Verify paths, symbols, interfaces,
-   dependencies, commands, conventions, generated regions, and prior tests.
-   Never invent repository facts.
-3. **Make traceability semantic and bidirectional.** Map each requirement,
-   invariant, quality target, threat, and compatibility obligation to design
-   decisions and verification. Map every decision, changed surface, and test
-   back to authority or a named risk.
-4. **Design tests around behavior.** Prefer the fewest stable public seams that
-   expose the required behavior. Test observable state and outcomes, not private
-   methods, collaborator call choreography, or the proposed implementation.
-5. **Use independent oracles.** Derive expected results from the requirement,
-   contract, worked example, trusted model, or known literal—not by repeating
-   the planned algorithm.
-6. **Plan real TDD.** Enumerate the test catalog for review, then order it into
-   vertical slices executed one test at a time: red, minimal green, refactor.
-   Never instruct the implementer to write the entire suite before production
-   code.
-7. **Resolve decisions before approval.** A material open question, unsupported
-   assumption, unknown test oracle, or unverified integration point makes the
-   document `BLOCKED`, not implementation-ready.
-8. **Scale detail to risk.** Include only views and controls that answer a
-   reviewer concern. Do not omit an applicable concern; do not fill the document
-   with ritual `N/A` sections, mandatory diagrams, or invented alternatives.
-9. **Keep one coherent delivery unit per design.** Split work that cannot be
-   reviewed, implemented, and verified as one bounded change.
-10. **Do not implement.** Include exact interfaces, schemas, state tables,
-    equations, or short decision-rich pseudocode only when they remove ambiguity.
-    Do not include copy-paste method bodies or test code.
-
-## Status model
-
-Use exactly these states unless the repository defines stronger ones:
-
-- `DRAFT`: still resolving or writing the design.
-- `BLOCKED`: missing authority, evidence, feasibility, or a material decision.
-- `READY FOR REVIEW`: author checks pass; an accountable human has not approved.
-- `APPROVED`: a named human approved this exact revision; implementation may
-  begin.
-- `SUPERSEDED`: another design revision replaced this one.
-
-Record reviewer, date, and design revision when changing to `APPROVED`. Any
-material post-approval change returns the document to `READY FOR REVIEW`.
+Read [foundations.md](references/foundations.md) when architecture principles conflict. Read [test-design.md](references/test-design.md) before designing non-trivial verification. Read [design-document-template.md](references/design-document-template.md) before creating or materially restructuring a durable design document.
 
 ## Workflow
 
-### 1. Resolve authority and local conventions
+1. **Resolve authority.** Identify the approved requirement and acceptance-example revisions, decision owner, repository instructions, design conventions, and required reviewers. Stop if a missing product decision would change observable behavior.
+2. **Characterize the current system.** Map relevant modules, entry points, state and data flow, contracts, dependencies, trust boundaries, side effects, failure modes, deployment topology, tests, and operational constraints.
+3. **Decide whether design is warranted.** Classify the change as exploratory, lightweight, standard, or high assurance. For a lightweight change, return a concise no-design-needed rationale, material risks, and required checks instead of manufacturing an artifact.
+4. **Frame the decision.** State goals, non-goals, constraints, assumptions, open questions, decision drivers, and the exact requirement IDs the design must satisfy.
+5. **Compare viable options.** Include the current approach where relevant. Evaluate correctness, information hiding, coupling, migration, compatibility, security, privacy, operability, testability, cost, and reversibility. Recommend one option and say why the alternatives lose here.
+6. **Design the smallest coherent change.** Give each invariant one owner. Hide change-prone choices behind a useful boundary. Keep stable policy independent of provider, framework, storage, transport, or tracker mechanisms when the system's complexity justifies that separation.
+7. **Specify contracts and failure behavior.** Define inputs, outputs, state transitions, validation, permissions, idempotency, retries, concurrency, timeouts, partial failure, cleanup, observability, compatibility, migration, rollout, and rollback only where applicable.
+8. **Derive verification before task order.** Map each requirement and material risk to the lowest boundary that can prove it. Choose deterministic tests, integration or contract checks, security or quality-attribute evidence, and operational validation.
+9. **Order implementation slices.** Sequence by dependencies and risk reduction. Prefer thin end-to-end increments. Use red-green-refactor where a trustworthy failing test is practical; otherwise state the exception and compensating verification.
+10. **Compress and gate.** Remove background that does not change a decision. Validate links, identifiers, change surfaces, rollout order, test traceability, unresolved questions, and approval status.
 
-Read the relevant repository instructions, design templates, governing
-requirements or issue, acceptance examples, ADRs, architecture docs, source,
-nearby tests, dependency manifests, CI configuration, and build/test commands.
-Determine:
+## Design quality rules
 
-- the authoritative requirement IDs and exact revision;
-- the accountable product and technical owners;
-- the intended delivery unit and design-file location;
-- whether the change is greenfield, brownfield behavior, defect correction,
-  refactor, migration, or exploratory work;
-- the repository's persistence and approval conventions.
+- Repository architecture and observed constraints outrank generic patterns.
+- Treat *Clean Architecture*, SOLID, and code smells as conditional heuristics. Do not add layers or ports without a concrete policy boundary or change pressure.
+- Prefer deep modules with small interfaces over pass-through abstractions.
+- Keep provider and framework details at explicit adapters; avoid broad textual transformations that can alter policy accidentally.
+- Preserve public behavior and backward compatibility unless the approved requirement authorizes change.
+- Include rejected alternatives only when they were genuinely viable or illuminate a consequential trade-off.
+- Never invent benchmark results, capacity, stakeholder approval, legal conclusions, or completed validation.
 
-If no formal specification exists, use the user's explicit request as the
-authority only when it already distinguishes correct from incorrect behavior.
-Capture a compact behavior contract and label its source. Ask for clarification
-when missing intent would change behavior, scope, architecture, safety, or cost.
+## Verification design
 
-### 2. Characterize the current system
+Trace `requirement or risk → observation → test boundary → setup/data → expected evidence`. Include functional, security, privacy, performance, reliability, accessibility, compatibility, migration, and operational validation only when the change creates those risks.
 
-Trace the current entry points, call and data flow, state transitions, side
-effects, failure boundaries, callers, consumers, and deployment path. Record
-only facts that constrain this change, each with repository evidence.
+TDD is a useful default, not a universal law. For legacy seams, exploratory work, generated artifacts, infrastructure, nondeterministic systems, or expensive environments, specify the strongest feasible characterization or staged validation and state residual risk.
 
-For brownfield work, state current behavior and behavior that must remain
-unchanged. For a defect, state the minimal reproduction and observed versus
-required outcome. For greenfield work, identify the integration points and
-explicitly state that no behavioral baseline exists.
+## Readiness gate and handoff
 
-### 3. Challenge readiness before designing
+A design is ready for approval when:
 
-Confirm that scope, non-goals, behavior, permissions, failure/recovery
-semantics, compatibility, and measurable quality targets are sufficiently
-defined for the risk. Separate:
+- the approved requirement revision and every affected identifier are traceable;
+- current behavior and constraints are evidence-backed;
+- the selected option, alternatives, trade-offs, and reversibility are clear;
+- contracts, invariants, change surfaces, dependency order, failure behavior, and migration are precise enough to implement;
+- the verification plan could detect the material defects and risks;
+- open questions have owners and consequences; and
+- the document identifies its approver without claiming approval.
 
-- product gaps, which return to the requirement owner;
-- architecture decisions, which follow the repository's ADR policy;
-- bounded implementation decisions, which belong in this document;
-- unknown feasibility, which requires focused investigation or a disposable
-  prototype before approval.
-
-Ask only decision-bearing questions that cannot be answered from evidence. Ask
-in a small batch, explain the impact, and give a recommendation when evidence
-supports one. Do not draft around a material unknown.
-
-### 4. Design the smallest coherent change
-
-Define the exact modules, files, generated sources, interfaces, schemas,
-invariants, state transitions, runtime sequence, error mapping, side effects,
-dependencies, and integration call sites that must change. Preserve established
-architecture unless the approved scope requires changing it.
-
-Use an impact screen for dependencies and external services, configuration and
-secrets, data and migration, API and compatibility, security and privacy,
-reliability and concurrency, performance and resources, observability,
-deployment and rollback, and accessibility or interaction. Expand only the
-applicable concerns with concrete decisions and verification.
-
-For a consequential or uncertain choice, compare at least two viable shapes and
-record the selected option and trade-off. Do not manufacture alternatives for
-obvious local decisions. Use a diagram only when it communicates relationships,
-ordering, state, or deployment more clearly than short prose or a table.
-
-### 5. Derive the test design before the task sequence
-
-Build a test basis from requirements, rules, examples, invariants, quality
-targets, threats, failure modes, unchanged behavior, and prior defects. Then:
-
-1. Select the smallest reliable test level and highest stable seam that can
-   observe each behavior.
-2. Apply the techniques in [test-design.md](references/test-design.md) to derive
-   a small discriminating set of cases.
-3. Specify every case with a stable verification ID, repository-conventional
-   name and location, trace links, level and seam, setup, stimulus, observable
-   result and forbidden side effects, independent oracle source, test data,
-   boundary doubles, deterministic controls, and expected pre-change signal.
-4. Mark new behavior and regression cases `RED` with the precise expected
-   failure. Mark characterization cases `GREEN BASELINE` and explain the
-   behavior they freeze. A new-behavior test that already passes needs
-   investigation.
-5. Identify exact focused and full-suite commands. If a command or environment
-   is unknown, record the gap and do not invent it.
-6. Give every in-scope requirement and material risk adequate evidence. Use
-   inspection, analysis, measurement, security review, accessibility evaluation,
-   or a rehearsal when an automated example is not the right oracle.
-7. Remove redundant cases. Retain multiple cases only when they cover distinct
-   partitions, boundaries, rules, transitions, failure points, platforms, or
-   risks.
-
-Spend more design detail on seams, data, oracles, and failure discrimination
-than on incidental implementation mechanics.
-
-### 6. Order one-test-at-a-time TDD slices
-
-Create dependency-ordered vertical slices. Use a walking skeleton first when
-the change crosses a new integration path. For each slice, name:
-
-- the next failing verification case;
-- the minimum externally observable capability needed to make it pass;
-- the expected changed surfaces;
-- the focused command and completion signal;
-- any safe refactor after green.
-
-Within a slice, run one red-green-refactor cycle before starting the next case.
-Keep migrations, contract changes, and shared test infrastructure early enough
-to unblock later behavior, but never create speculative framework code.
-
-### 7. Draft and compress
-
-Draft with the repository template or the bundled fallback. Prefer compact
-tables for exact mappings and prose for rationale. Link to authoritative
-material instead of restating it. Delete instructions and empty optional
-subsections from the finished artifact after the impact screen records why they
-do not apply.
-
-Do not modify source, tests, backlog items, changelogs, or external systems
-unless the user separately authorizes that work or the repository explicitly
-defines it as part of creating the design artifact.
-
-### 8. Run the readiness gate
-
-Set `READY FOR REVIEW` only when all author checks pass:
-
-- Authority, scope, non-goals, baseline, and unchanged behavior are explicit.
-- No material product or technical decision remains open.
-- Every repository fact and chosen dependency has current evidence.
-- Interfaces, data, runtime behavior, errors, and applicable quality concerns
-  are concrete enough to implement without interpretation.
-- Every requirement and material risk maps to a decision and adequate
-  verification; every decision, changed surface, and verification case maps
-  backward.
-- Every automated case has a stable seam, discriminating independent oracle,
-  controlled setup, data/doubles plan, and expected pre-change signal.
-- TDD slices are vertical, dependency-ordered, and executable one case at a
-  time with known commands.
-- Migration, compatibility, rollout, observability, and rollback are safe where
-  applicable.
-- Risks have detection, mitigation or fallback, and an owner.
-- The document contains no disguised requirement, invented fact, code dump,
-  checklist theatre, or unexplained scope.
-
-If a check fails, fix it or set `BLOCKED` and name the owner and resolution
-needed. Present `READY FOR REVIEW` as an author assessment, never as approval.
-
-## Handoff
-
-When presenting the artifact, report:
-
-- path, design revision, and status;
-- governing requirement revision and delivery scope;
-- material decisions and consequential trade-offs;
-- verification count by level, complete traceability status, and first TDD case;
-- blockers, residual risks, and the single approval decision needed.
-
-After a named human approves, record the approval and hand implementation the
-approved design revision, first TDD slice, focused command, and baseline
-evidence. Instruct the implementer to stop and return to the owning artifact if
-code discovery invalidates a requirement, design decision, test oracle, or risk
-assumption.
-
-## Reject these patterns
-
-- A generic template filled without repository evidence.
-- A new observable behavior hidden in a technical decision or test expectation.
-- File lists without responsibilities, contracts, or integration points.
-- Large code or pseudocode blocks standing in for design rationale.
-- Test names without setup, stimulus, observable oracle, and traceability.
-- Tests against private methods or mocks of internal collaborators.
-- Tautological assertions that reproduce the proposed algorithm.
-- Happy-path-only coverage, arbitrary coverage quotas, or one test per method.
-- Uncontrolled time, randomness, concurrency, network, or shared state.
-- A bulk “write all tests, then implement” phase labeled as TDD.
-- Mandatory alternative counts, diagrams, or sections with no decision value.
-- `N/A`, “follow existing pattern,” or “handle errors” without evidence.
-- Open questions or unowned risks in a document marked ready.
-- Implementation-completion checkboxes in a pre-implementation gate.
+On approval, hand `$implement` the exact design revision, ordered slices, owned change surfaces, and required checks. Hand `$engineer-tests` the requirement-and-risk trace when separate test engineering is warranted. Return product ambiguities to the product owner rather than resolving them as technical choices.

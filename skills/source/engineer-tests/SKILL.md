@@ -1,232 +1,71 @@
 ---
 name: engineer-tests
-description: Design, implement-pl, execute, and assess risk-based software tests across functional behavior, integration contracts, security, performance, reliability, accessibility, compatibility, and other quality attributes. Use for QA engineering, test strategy or planning, automated test implementation, regression suites, test architecture, test-data design, flaky-test diagnosis, coverage or mutation analysis, release verification, exploratory testing, and functional or non-functional validation. Do not use to fix production code, redefine product requirements, or perform an independent code review.
+description: Design, implement, execute, or assess risk-based software tests and test infrastructure. Use for test-only QA, regression suites, quality attributes, flaky tests, coverage, mutation analysis, or release verification. Do not use to fix production code, redefine product intent, or perform independent code review.
+metadata:
+  owner: "pldelisle"
+  version: "2.0.0"
+  last-verified: "2026-09-04"
+  verification-scope: "deterministic; behavioral suite requires external execution"
+  compatibility: "Codex, Claude Code, and Kiro"
 ---
 
 # Engineer Tests
 
-## Mission
+## Outcome and boundary
 
-Produce the smallest maintainable body of evidence that gives stakeholders justified confidence
-in the software's important behavior and quality attributes. Design tests to reveal consequential
-failures, not to maximize test count, coverage, or automation.
+Produce the smallest maintainable body of evidence that gives justified confidence in the requested behavior and relevant quality attributes.
 
-Treat test engineering as an investigation: establish the oracle, model the risks, choose a test
-level that can observe each risk, implement discriminating checks, and interpret the evidence with
-its limitations.
+Own test strategy, test design, test-only code and fixtures, execution, defect reproduction, and evidence reporting. Preserve product requirements and production behavior. Hand a verified production defect to `$implement` unless the user also authorizes a production fix. Test evidence may inform `$code-review`, but it is not an independent merge recommendation.
 
-## Test engineer contract
+## Risk-first workflow
 
-- Own test strategy, test design, test code, test-only fixtures and infrastructure, execution,
-  defect reproduction, and evidence reporting within the requested scope.
-- Preserve product requirements. Ask the Product Owner when expected behavior is materially
-  ambiguous; do not silently turn current behavior into intended behavior.
-- Do not change production code merely to make a test pass. Reproduce a product defect and hand
-  the correction to `software_engineer` unless the user separately authorizes a production fix.
-- Keep independent review separate. Test results are review evidence, but `$code-review`
-  owns the merge recommendation and independent assessment.
-- Use repository-defined languages, frameworks, commands, layout, fixtures, and dependency policy.
-  Do not introduce a tool or convention merely because it is familiar.
-- Never weaken an assertion, broaden a tolerance, add a retry, quarantine a test, or update a
-  snapshot without evidence that the previous expectation was wrong.
-- Never place credentials, production personal data, or other sensitive data in tests, fixtures,
-  logs, recordings, corpora, snapshots, or reports.
-- Run intrusive security tests, load tests, fault injection, or chaos experiments only against an
-  explicitly authorized and appropriately isolated target. Never infer authorization for production.
+1. **Establish the oracle.** Read applicable requirements, acceptance examples, public contracts, incidents, and repository test conventions. Separate explicit intent, observed baseline, and hypothesis.
+2. **Map the risk.** Identify actors, state, inputs, trust boundaries, integrations, failure modes, consequences, likelihood, observability, and recent change exposure.
+3. **Map risk to evidence.** For each material risk, name the observation that would reveal failure and choose the lowest test boundary that can observe it reliably.
+4. **Select techniques.** Use examples, decision tables, boundaries, state transitions, property-based tests, fuzzing, concurrency tests, benchmarks, security tests, or exploratory charters only where their fault model fits.
+5. **Implement discriminating checks.** Reuse repository fixtures and tools. Keep data minimal, safe, deterministic, and explicit about time, randomness, identity, tenancy, and lifecycle.
+6. **Execute in evidence order.** Reproduce first, run focused checks, then applicable suites and quality gates. Record the command, environment assumptions, result, duration, and relevant artifact.
+7. **Diagnose honestly.** Classify failures as product defect, test defect, environment/infrastructure defect, flaky or nondeterministic behavior, or unresolved. Do not launder uncertainty into a retry or weaker expectation.
+8. **Report bounded confidence.** Trace each result to a requirement or risk and state what was not tested, why, and the residual consequence.
 
-## Scale rigor to risk
+Read [test-design.md](references/test-design.md) for non-trivial state, data-flow, integration, property, or concurrency testing. Read [security-testing.md](references/security-testing.md) for elevated application-security risk. Read [quality-attributes.md](references/quality-attributes.md) for performance, reliability, accessibility, or compatibility work. Read [foundations.md](references/foundations.md) only when selecting between competing test strategies.
 
-Assess consequence, likelihood, change exposure, complexity, observability, and historical failure
-evidence. Use qualitative rankings when numbers would create false precision.
+## Proportionate rigor
 
-Increase depth for:
+Increase depth for identity, authorization, tenancy, privacy, money, irreversible actions, public contracts, persistence, migrations, distributed state, concurrency, retries, time, parsers, external input, availability objectives, broad refactors, weak specifications, and prior regressions.
 
-- identity, authorization, tenancy, secrets, privacy, money, regulated data, or irreversible actions;
-- public contracts, persistence, migrations, distributed state, concurrency, retries, or time;
-- parsers, files, queries, commands, templates, deserialization, dependencies, and external input;
-- capacity limits, availability objectives, safety constraints, or expensive failure recovery;
-- broad refactors, weak specifications, legacy behavior, flaky areas, or prior regressions.
+Do not run intrusive security testing, load, fault-injection, or chaos work against production or third-party targets without explicit authorization and containment. Never use production credentials or personal data in tests, fixtures, recordings, snapshots, or reports.
 
-For elevated application-security risk, read and apply [security-testing.md](references/security-testing.md)
-in full. For performance, reliability, accessibility, compatibility, or other quality attributes,
-read [quality-attributes.md](references/quality-attributes.md) in full. Read
-[test-design.md](references/test-design.md) when selecting techniques for a non-trivial behavior,
-state machine, integration, data flow, or concurrency path. Read [foundations.md](references/foundations.md)
-when adapting this method or evaluating competing practices.
+## Test-first and exception path
 
-## Core workflow
+Prefer a failing test before a production fix when the failure is reproducible and the test boundary is trustworthy. Test-first is not a universal gate. Legacy seams, exploratory spikes, generated artifacts, infrastructure, nondeterministic systems, and expensive environments may require characterization, simulation, static checks, staged validation, or manual evidence first.
 
-### 1. Establish the test basis
+When departing from test-first:
 
-Before editing tests:
+1. state why a failing automated test is impractical or misleading;
+2. use the strongest feasible compensating verification;
+3. preserve evidence that can become a regression check later; and
+4. report residual risk.
 
-1. Read applicable `AGENTS.md`, repository instructions, supported versions, and documented check
-   commands.
-2. Identify the exact revision or working-tree change, relevant requirements, acceptance examples,
-   public contracts, architecture records, incidents, and defect reports.
-3. Map the system under test: actors, entry points, data flows, state transitions, dependencies,
-   side effects, trust boundaries, failure boundaries, and observable outputs.
-4. Read nearby tests and test configuration to learn naming, fixtures, helpers, isolation model,
-   environment assumptions, and known gaps.
-5. Record material unknowns. Distinguish an explicit requirement, an inferred contract, an observed
-   baseline, and a hypothesis.
+Use coverage and mutation analysis as diagnostics, not targets. Apply mutation testing selectively to critical logic or a suspiciously weak suite; surviving mutants justify investigation, not automatic test multiplication.
 
-If intended behavior is unavailable, use characterization tests only where preserving observed
-behavior is the stated goal. Label uncertainty rather than blessing accidental behavior.
+## Test integrity
 
-### 2. Build a risk-to-evidence map
+- Test observable behavior and material invariants rather than private implementation shape.
+- Prefer deterministic assertions and contract-aware fakes at real boundaries; do not mock the subject under test.
+- Never weaken assertions, broaden tolerances, update snapshots, add retries, or quarantine tests without evidence the expectation or environment is wrong.
+- Keep tests independent, readable, bounded, and explicit about cleanup.
+- Cover malformed input, partial failure, recovery, idempotency, concurrency, migration, and compatibility only when relevant to the modeled risk.
+- Do not add a new framework or convention merely because it is familiar.
 
-Translate each relevant requirement, invariant, failure mode, threat, and quality objective into an
-observable test condition. For each condition, identify:
-
-| Field | Question |
-|---|---|
-| Risk or requirement | What failure or obligation is being addressed? |
-| Trigger | What input, state, event, actor, timing, or load exposes it? |
-| Oracle | What observable result distinguishes correct from incorrect behavior? |
-| Test level | What is the narrowest realistic boundary that can observe it? |
-| Data and environment | What controlled state and dependencies are required? |
-| Evidence | What assertion, invariant, metric, or artifact proves the result? |
-| Gate | Must it block local change, merge, release, or deployment? |
-
-Do not generate a case for every matrix combination. Prioritize cases that discriminate behavior,
-cross boundaries, cover high-impact failures, or challenge a plausible implementation mistake.
-
-### 3. Choose size, scope, and technique independently
-
-Classify **size** by resources and nondeterminism:
-
-- **Small:** one process, no real network, no sleep, controlled clock/randomness, fast and hermetic.
-- **Medium:** limited local processes or real local infrastructure with bounded I/O.
-- **Large:** deployed or multi-service system, browser/device, shared infrastructure, or substantial
-  time and resources.
-
-Classify **scope** by behavior observed:
-
-- **Unit/component:** cohesive logic or a narrow public API.
-- **Integration/contract:** a real boundary between components, schemas, protocols, or services.
-- **End-to-end/system:** a critical user journey or emergent system behavior.
-
-Prefer many small, narrow tests and a deliberately limited set of larger tests, but let risks choose
-the mix. Percentages and pyramids are heuristics, not acceptance criteria. Prefer real lightweight
-implementations when practical; use fakes at unstable or expensive boundaries; use stubs for specific
-responses; use interaction assertions only when the interaction itself is the contract. Verify a fake
-against the real contract when divergence would invalidate evidence.
-
-Select applicable design techniques rather than relying on happy-path examples:
-
-- equivalence partitions and boundary values;
-- decision tables for interacting rules;
-- state-transition and sequence tests for lifecycle behavior;
-- pairwise or constrained combinatorial tests for configuration matrices;
-- properties, invariants, generators, shrinking, and metamorphic relations for broad input spaces;
-- model-based tests for protocols and state machines;
-- fault injection for cleanup, rollback, retry, timeout, and partial failure;
-- fuzzing for parsers, codecs, protocol handlers, unsafe memory boundaries, and hostile inputs;
-- differential tests when two legitimate implementations or versions can serve as reciprocal oracles.
-
-### 4. Design trustworthy test data and environments
-
-- Use the smallest data set that expresses the behavior. Name data by domain meaning.
-- Cover valid, invalid, absent, empty, duplicate, extreme, malformed, unauthorized, and adversarial
-  values only where the contract makes them distinct.
-- Build data through stable public factories or builders. Avoid enormous shared fixtures and hidden
-  dependencies between tests.
-- Make ownership and cleanup explicit. Give parallel tests unique namespaces and make reruns safe.
-- Use synthetic or irreversibly de-identified data. Verify that recordings and snapshots cannot
-  capture secrets or personal information.
-- Control clocks, time zones, locale, randomness, identifiers, scheduling, and external services at
-  explicit seams. Record seeds for generated failures.
-- Make the environment representative for the property under test: hermetic for logic, real protocol
-  and schema boundaries for integration, production-like topology and configuration for system and
-  performance evidence.
-
-### 5. Implement tests as maintainable specifications
-
-- Test observable behavior through public or stable boundaries. Avoid private methods and incidental
-  call order.
-- Give each test one coherent behavioral reason to fail. Multiple assertions are appropriate when
-  they prove one outcome.
-- Name the condition and expected outcome. Structure setup, action, and assertion so the broken
-  contract is obvious from the failure.
-- Keep tests complete and concise. Prefer DAMP readability over DRY indirection when sharing would
-  hide relevant values or behavior.
-- Put no branching, retry loops, calculations duplicating production logic, or broad exception
-  swallowing in test bodies. Use independent expected values and precise failure messages.
-- Assert outputs, durable state, emitted events, external side effects, and absence of forbidden
-  effects as applicable. Avoid assertions that merely prove the code ran.
-- For a defect, first add the narrowest regression test that fails for the reproduced defect and
-  passes for the correct behavior when practical.
-- Keep snapshots narrow, reviewable, deterministic, and free of volatile or sensitive fields. Use
-  semantic assertions when the behavior matters more than the full representation.
-- Follow existing markers and suite placement so the test runs at the intended gate.
-
-### 6. Cover applicable quality dimensions
-
-Always test functional correctness and changed contracts. Triage the following for relevance rather
-than claiming every change needs every category:
-
-- **Functional:** completeness, correctness, permissions, boundaries, state, errors, compatibility,
-  and critical journeys.
-- **Security and privacy:** positive and negative control requirements, abuse cases, trust-boundary
-  behavior, sensitive-data handling, and supply-chain or configuration exposure.
-- **Performance efficiency:** response-time distribution, throughput, capacity, resource utilization,
-  degradation, and recovery under a stated workload.
-- **Reliability:** repeated operation, fault tolerance, retries, idempotency, recovery, cancellation,
-  overload, durability, and availability behavior.
-- **Interaction and accessibility:** keyboard and assistive-technology semantics, responsive variants,
-  error prevention, comprehensibility, and applicable WCAG criteria.
-- **Compatibility and flexibility:** supported runtime, browser, device, operating system, protocol,
-  schema, version, installation, upgrade, downgrade, and coexistence matrices.
-- **Maintainability and testability:** static checks and architectural tests only when they enforce a
-  concrete repository rule or boundary; do not substitute structural metrics for user-visible quality.
-- **Safety:** hazards, unsafe states, fail-safe behavior, warnings, recovery, and independent controls
-  where the system can cause physical, financial, or other serious harm.
-
-### 7. Execute in evidence-building order
-
-1. Run the smallest relevant existing test to establish the baseline.
-2. For regression work, demonstrate the new test detects the defect before the correction when the
-   revision can be safely evaluated.
-3. Run the new or changed test in isolation, then its file/module, then relevant integration suites.
-4. Run repository-required formatting, linting, type checking, builds, and broader tests in proportion
-   to risk.
-5. Repeat tests that are timing-, scheduling-, random-, process-, or environment-sensitive enough to
-   warrant a flake check. Change order or parallelism when those are credible triggers.
-6. Use coverage to find unexamined behavior, not as proof of correctness. Inspect branch/path gaps in
-   the risky code rather than chasing a global percentage.
-7. Use targeted mutation testing when supported and valuable. Add tests for meaningful surviving
-   mutants; classify equivalent or irrelevant mutants instead of gaming the score.
-8. Recheck repository status and inspect generated artifacts after every tool that may rewrite files.
-
-Do not claim a check ran if the command, dependency, environment, service, data, time, or authorization
-was unavailable. Report the exact limitation and the evidence still obtained.
-
-### 8. Diagnose failures without laundering them
-
-Classify a failure as product defect, test defect, environment/infrastructure defect, or unresolved.
-Reproduce it from a clean controlled state and minimize the trigger.
-
-For flaky tests, preserve the failure signal while investigating shared state, uncontrolled time or
-randomness, race conditions, order dependence, resource leaks, external services, insufficient waits,
-and overbroad timeouts. Quarantine only under an explicit repository policy, with ownership and a
-restoration condition. A rerun is diagnostic evidence, not a passing result.
-
-### 9. Inspect and report
-
-Before completion, inspect every changed test and fixture for discriminating assertions, false
-positives, implementation coupling, nondeterminism, unsafe data, excessive runtime, misleading names,
-and whether it runs in the intended suite.
+## Completion contract
 
 Report:
 
-1. **Scope and strategy:** behavior, risks, levels, and deliberate exclusions.
-2. **Tests changed:** cases and the requirement, invariant, threat, or quality objective each proves.
-3. **Results:** exact commands, pass/fail counts, performance statistics, seeds, and relevant artifacts.
-4. **Defects:** minimal reproduction, observed versus expected behavior, impact, and evidence; do not
-   implement production fixes without authorization.
-5. **Residual risk:** untested paths, unavailable environments, weak or missing oracles, flaky signals,
-   and assumptions.
+1. the tested scope, requirements, and risk-to-evidence map;
+2. files changed and the purpose of each test boundary;
+3. commands, environments, results, and retained artifacts;
+4. diagnosed failures or defects with reproduction evidence;
+5. untested risks, limitations, and the release-confidence statement.
 
-Passing tests establish only that the exercised conditions met their oracles in the observed
-environment. Never describe a suite as exhaustive or claim that absence of failures proves quality.
+Passing tests demonstrate only the exercised observations under the stated conditions. Never present them as proof of correctness.

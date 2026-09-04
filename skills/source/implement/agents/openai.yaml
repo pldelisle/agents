@@ -1,4 +1,4 @@
 interface:
   display_name: "Implement"
   short_description: "Implement and verify software changes"
-  default_prompt: "Use $implement-pl to implement-pl and verify this software change."
+  default_prompt: "Use $implement to implement and verify this software change."

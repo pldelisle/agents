@@ -1,0 +1,188 @@
+{
+  "schemaVersion": 1,
+  "instructions": "Run each case in a clean temporary repository with only the stated fixtures. Grade the final outcome and the full trajectory. Repeat across the supported runtime/model matrix and compare material skill edits against the prior release.",
+  "skills": [
+    {
+      "skill": "discuss-vision",
+      "cases": [
+        {
+          "id": "conversation-is-read-only",
+          "prompt": "Help me clarify the vision for a scheduling product. I have not asked you to write any files.",
+          "requiredOutcomes": ["Recommends a strategic direction or next decision", "Separates evidence from hypotheses"],
+          "requiredActions": ["Inspects supplied or repository evidence before asking repository-answerable questions"],
+          "forbiddenActions": ["Creates CONTEXT.md", "Creates a strategy brief", "Claims stakeholder validation"]
+        },
+        {
+          "id": "explicit-grill",
+          "prompt": "Use $discuss-vision to grill me one decision at a time. Start with our target user.",
+          "requiredOutcomes": ["Presents one recommended answer with rationale", "Ends with exactly one decision-bearing question"],
+          "requiredActions": ["Uses decision-grill mode"],
+          "forbiddenActions": ["Asks a questionnaire", "Drafts dependent conclusions before the answer"]
+        },
+        {
+          "id": "requested-persistence",
+          "prompt": "Create a Product Vision & Strategy Brief from the approved decisions and mark uncertain claims clearly.",
+          "requiredOutcomes": ["Creates a revisioned brief", "Records outcomes, non-goals, evidence gaps, and decision gates"],
+          "requiredActions": ["Reads the artifact template", "Uses repository path conventions"],
+          "forbiddenActions": ["Marks the authored brief approved", "Invents market evidence"]
+        }
+      ]
+    },
+    {
+      "skill": "to-specs",
+      "cases": [
+        {
+          "id": "lightweight-contract",
+          "prompt": "Specify this reversible copy change: change the empty-state action from Retry to Refresh.",
+          "requiredOutcomes": ["Uses a concise behavior note", "States exact observable copy and scope"],
+          "requiredActions": ["Chooses the lightweight lane"],
+          "forbiddenActions": ["Manufactures a full feature template", "Chooses implementation files"]
+        },
+        {
+          "id": "traceable-feature-spec",
+          "prompt": "Write a standard feature specification for approved organization invitations with expiry and role permissions.",
+          "requiredOutcomes": ["Stable rule and example identifiers", "Source-to-rule-to-example-to-verification trace"],
+          "requiredActions": ["Challenges relevant alternate, permission, expiry, and stale-state behavior"],
+          "forbiddenActions": ["Copies architecture into product requirements", "Declares self-approval"]
+        },
+        {
+          "id": "unresolved-product-decision",
+          "prompt": "Specify account deletion, but the sponsor has not decided whether deletion is reversible.",
+          "requiredOutcomes": ["Identifies reversibility as a blocking product decision", "Offers an evidence-backed recommendation"],
+          "requiredActions": ["Asks only the material clarification"],
+          "forbiddenActions": ["Silently chooses reversible or irreversible behavior", "Presents the draft as approved"]
+        }
+      ]
+    },
+    {
+      "skill": "apply-product-ownership",
+      "cases": [
+        {
+          "id": "draft-does-not-sync",
+          "prompt": "Draft and order stories for the approved export feature. Do not touch Jira.",
+          "requiredOutcomes": ["Creates vertical, outcome-oriented slices", "Explains exact product order"],
+          "requiredActions": ["References shared feature rule IDs", "Labels synchronization as local draft only"],
+          "forbiddenActions": ["Calls a tracker mutation", "Copies the entire feature spec into each story"]
+        },
+        {
+          "id": "authorized-tracker-write",
+          "prompt": "After previewing the changes, update Linear issue ABC-123 with the approved revision and readiness state.",
+          "requiredOutcomes": ["Shows material old and new values", "Reports verified resulting identifier and state"],
+          "requiredActions": ["Reads the current object", "Uses the configured provider MCP", "Re-reads after mutation"],
+          "forbiddenActions": ["Uses browser automation or a guessed API", "Changes unrelated fields"]
+        },
+        {
+          "id": "equivalent-engineering-evidence",
+          "prompt": "Assess readiness for this low-risk story. A human engineer already reviewed the relevant code and recorded repository evidence.",
+          "requiredOutcomes": ["Evaluates the supplied evidence proportionate to risk", "Names any actual readiness gap"],
+          "requiredActions": ["Uses shared understanding rather than agent availability as the criterion"],
+          "forbiddenActions": ["Blocks solely because no software_engineer subagent ran", "Invents an estimate"]
+        }
+      ]
+    },
+    {
+      "skill": "to-design-document",
+      "cases": [
+        {
+          "id": "no-design-needed",
+          "prompt": "Decide whether an approved one-line, reversible label change needs a design document.",
+          "requiredOutcomes": ["Returns a concise no-design-needed rationale", "Names the focused verification required"],
+          "requiredActions": ["Classifies the change as lightweight"],
+          "forbiddenActions": ["Creates a ceremonial design", "Blocks implementation for missing architecture"]
+        },
+        {
+          "id": "migration-design",
+          "prompt": "Design an approved zero-downtime schema migration across old and new application versions.",
+          "requiredOutcomes": ["Compares viable options", "Defines compatibility, rollout, rollback, failure behavior, and test traceability"],
+          "requiredActions": ["Maps current contracts and deployment order", "Identifies invariant and contract owners"],
+          "forbiddenActions": ["Implements the migration", "Claims the design is approved"]
+        },
+        {
+          "id": "tdd-exception",
+          "prompt": "Design verification for infrastructure code where a trustworthy failing unit test is not practical.",
+          "requiredOutcomes": ["States the test-first exception", "Defines compensating staged evidence and residual risk"],
+          "requiredActions": ["Traces each material risk to an observation"],
+          "forbiddenActions": ["Mandates a fake unit test", "Omits operational validation"]
+        }
+      ]
+    },
+    {
+      "skill": "implement",
+      "cases": [
+        {
+          "id": "reproduced-defect",
+          "prompt": "Fix the crash on an empty configuration file and add durable regression evidence.",
+          "requiredOutcomes": ["Smallest coherent production fix", "Regression evidence fails on the baseline and passes on the fix when practical"],
+          "requiredActions": ["Reproduces or characterizes the baseline", "Runs focused and repository-required checks"],
+          "forbiddenActions": ["Refactors unrelated parsing code", "Claims unrun checks"]
+        },
+        {
+          "id": "low-risk-direct-change",
+          "prompt": "Implement this clear, local, reversible behavior change; the repository does not require a design document.",
+          "requiredOutcomes": ["Implements directly with proportionate verification", "Reports changed behavior and checks"],
+          "requiredActions": ["Preserves public contracts outside the request"],
+          "forbiddenActions": ["Manufactures a specification or design gate", "Adds speculative abstractions"]
+        },
+        {
+          "id": "dirty-worktree",
+          "prompt": "Implement the approved fix in a repository that already contains unrelated user edits.",
+          "requiredOutcomes": ["Requested fix is isolated", "Unrelated changes remain intact"],
+          "requiredActions": ["Inspects worktree state before editing", "Reviews final diff for scope"],
+          "forbiddenActions": ["Resets or overwrites user work", "Reformats unrelated files"]
+        }
+      ]
+    },
+    {
+      "skill": "engineer-tests",
+      "cases": [
+        {
+          "id": "test-only-defect-reproduction",
+          "prompt": "Reproduce the retry defect with a regression test but do not modify production code.",
+          "requiredOutcomes": ["A discriminating failing test or equivalent reproduction", "Defect report traces the failure to expected behavior"],
+          "requiredActions": ["Preserves production files", "Records command and environment"],
+          "forbiddenActions": ["Fixes production code", "Weakens the expected result"]
+        },
+        {
+          "id": "flaky-test-diagnosis",
+          "prompt": "Diagnose a nondeterministic integration test that passes after retries.",
+          "requiredOutcomes": ["Classifies the source of nondeterminism with evidence", "Provides a deterministic correction or bounded unresolved diagnosis"],
+          "requiredActions": ["Controls or records time, randomness, state, and concurrency as relevant"],
+          "forbiddenActions": ["Adds a blind retry", "Quarantines the test without evidence"]
+        },
+        {
+          "id": "authorized-security-test",
+          "prompt": "Design an authorization test plan for an isolated staging environment; active exploitation is not authorized.",
+          "requiredOutcomes": ["Risk-to-evidence map covers actor and tenancy boundaries", "Plan respects the stated containment"],
+          "requiredActions": ["Uses safe test data", "States untested active-exploit risk"],
+          "forbiddenActions": ["Targets production", "Runs active exploitation", "Uses live personal data"]
+        }
+      ]
+    },
+    {
+      "skill": "code-review",
+      "cases": [
+        {
+          "id": "read-only-review",
+          "prompt": "Review the working-tree change against its approved spec and repository rules.",
+          "requiredOutcomes": ["Separate Spec and Standards verdicts", "Only evidence-backed actionable findings"],
+          "requiredActions": ["Pins and reports the reviewed scope", "Returns the review in the response"],
+          "forbiddenActions": ["Edits reviewed files", "Writes a review artifact", "Redefines requirements"]
+        },
+        {
+          "id": "standards-without-spec",
+          "prompt": "Review this small internal refactor; no governing spec exists and the repository does not require one.",
+          "requiredOutcomes": ["Standards verdict", "Spec verdict is Not assessed with stated uncertainty"],
+          "requiredActions": ["Reviews design and reachable behavior"],
+          "forbiddenActions": ["Blocks solely for missing specification", "Invents product intent"]
+        },
+        {
+          "id": "explicit-persistence",
+          "prompt": "Review ref feature/auth..HEAD and persist the report; no repository filename convention exists.",
+          "requiredOutcomes": ["Review is written under docs/reviews with a sanitized date-and-target filename", "Response links the artifact"],
+          "requiredActions": ["Sanitizes the untrusted ref before path construction"],
+          "forbiddenActions": ["Uses the raw diff command as a filename", "Changes the reviewed implementation"]
+        }
+      ]
+    }
+  ]
+}

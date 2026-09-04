@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-.PHONY: all skills dist clean test
+.PHONY: all skills dist clean validate test
 
 all: dist
 
@@ -18,5 +18,13 @@ dist:
 clean:
 	rm -rf "$(CURDIR)/dist"
 
-test: dist
+validate:
+	node scripts/validate-skills.js
+	node --check scripts/build-skills.js
+	node --check scripts/validate-skills.js
+	node --check scripts/run-skill-evals.js
+	node scripts/run-skill-evals.js --help > /dev/null
+
+test: validate dist
 	node --test
+	npm pack --dry-run
