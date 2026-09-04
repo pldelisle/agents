@@ -30,8 +30,8 @@ test("parses repeatable and comma-separated CLI selections", () => {
       "codex,claude",
       "--runtime=kiro",
       "--skill",
-      "implement",
-      "--skill=to-specs,to-tickets",
+      "implement-pl",
+      "--skill=to-specs-pl,to-tickets-pl",
       "--tracker",
       "jira",
       "--global",
@@ -40,7 +40,7 @@ test("parses repeatable and comma-separated CLI selections", () => {
     ]),
     {
       runtimes: ["codex", "claude", "kiro"],
-      skills: ["implement", "to-specs", "to-tickets"],
+      skills: ["implement-pl", "to-specs-pl", "to-tickets-pl"],
       tracker: "jira",
       scope: "user",
       force: true,
@@ -56,7 +56,7 @@ test("loads the default config and resolves its target relative to the config", 
     JSON.stringify({
       runtimes: ["claude", "kiro"],
       tracker: "linear",
-      skills: ["implement"],
+      skills: ["implement-pl"],
       target: "configured-target",
       force: true,
     }),
@@ -70,7 +70,7 @@ test("loads the default config and resolves its target relative to the config", 
 
   assert.deepEqual(options.runtimes, ["claude", "kiro"]);
   assert.equal(options.tracker, "linear");
-  assert.deepEqual(options.skills, ["implement"]);
+  assert.deepEqual(options.skills, ["implement-pl"]);
   assert.equal(options.target, join(projectDirectory, "configured-target"));
   assert.equal(options.force, true);
 });
@@ -82,7 +82,7 @@ test("CLI options override configuration values", (t) => {
     JSON.stringify({
       runtimes: ["claude"],
       tracker: "jira",
-      skills: ["to-specs"],
+      skills: ["to-specs-pl"],
       scope: "user",
     }),
   );
@@ -91,7 +91,7 @@ test("CLI options override configuration values", (t) => {
     {
       runtimes: ["codex"],
       tracker: "linear",
-      skills: ["implement"],
+      skills: ["implement-pl"],
       scope: "project",
     },
     { cwd: projectDirectory, env: {}, userHome: join(projectDirectory, "home") },
@@ -99,7 +99,7 @@ test("CLI options override configuration values", (t) => {
 
   assert.deepEqual(options.runtimes, ["codex"]);
   assert.equal(options.tracker, "linear");
-  assert.deepEqual(options.skills, ["implement"]);
+  assert.deepEqual(options.skills, ["implement-pl"]);
   assert.equal(options.scope, "project");
 });
 
@@ -107,7 +107,7 @@ test("distribution contains every runtime and tracker variant", () => {
   for (const runtime of ["codex", "claude", "kiro"]) {
     for (const tracker of ["linear", "jira"]) {
       assert.equal(
-        existsSync(join(DEFAULT_DISTRIBUTION_ROOT, runtime, tracker, "skills", "implement", "SKILL.md")),
+        existsSync(join(DEFAULT_DISTRIBUTION_ROOT, runtime, tracker, "skills", "implement-pl", "SKILL.md")),
         true,
         `${runtime}/${tracker} distribution is missing`,
       );
@@ -121,7 +121,7 @@ test("installs only selected skills into a custom target", (t) => {
     {
       runtimes: ["codex"],
       tracker: "linear",
-      skills: ["implement"],
+      skills: ["implement-pl"],
       target,
     },
     { cwd: target, env: {}, userHome: join(target, "home") },
@@ -130,8 +130,8 @@ test("installs only selected skills into a custom target", (t) => {
   const operations = installSkills(options);
 
   assert.equal(operations.length, 1);
-  assert.equal(existsSync(join(target, ".codex", "skills", "implement", "SKILL.md")), true);
-  assert.equal(existsSync(join(target, ".codex", "skills", "to-specs")), false);
+  assert.equal(existsSync(join(target, ".codex", "skills", "implement-pl", "SKILL.md")), true);
+  assert.equal(existsSync(join(target, ".codex", "skills", "to-specs-pl")), false);
 });
 
 test("preflights collisions before installing any selected skill", (t) => {
@@ -143,13 +143,13 @@ test("preflights collisions before installing any selected skill", (t) => {
   };
   const environment = { cwd: target, env: {}, userHome: join(target, "home") };
 
-  installSkills(resolveOptions({ ...baseOptions, skills: ["implement"] }, environment));
+  installSkills(resolveOptions({ ...baseOptions, skills: ["implement-pl"] }, environment));
 
   assert.throws(
     () =>
       installSkills(
         resolveOptions(
-          { ...baseOptions, skills: ["implement", "to-specs"] },
+          { ...baseOptions, skills: ["implement-pl", "to-specs-pl"] },
           environment,
         ),
       ),
@@ -157,7 +157,7 @@ test("preflights collisions before installing any selected skill", (t) => {
       error instanceof InstallerError &&
       error.message.includes("Refusing to overwrite 1 existing skill"),
   );
-  assert.equal(existsSync(join(target, ".codex", "skills", "to-specs")), false);
+  assert.equal(existsSync(join(target, ".codex", "skills", "to-specs-pl")), false);
 });
 
 test("force replaces only colliding skill directories", (t) => {
@@ -166,20 +166,20 @@ test("force replaces only colliding skill directories", (t) => {
   const selection = {
     runtimes: ["codex"],
     tracker: "linear",
-    skills: ["implement"],
+    skills: ["implement-pl"],
     target,
   };
   const options = resolveOptions(selection, environment);
 
   installSkills(options);
-  const marker = join(target, ".codex", "skills", "implement", "old-file.txt");
+  const marker = join(target, ".codex", "skills", "implement-pl", "old-file.txt");
   writeFileSync(marker, "old");
 
   installSkills(resolveOptions({ ...selection, force: true }, environment));
 
   assert.equal(existsSync(marker), false);
   assert.match(
-    readFileSync(join(target, ".codex", "skills", "implement", "SKILL.md"), "utf8"),
+    readFileSync(join(target, ".codex", "skills", "implement-pl", "SKILL.md"), "utf8"),
     /^---/u,
   );
 });
@@ -190,7 +190,7 @@ test("dry-run plans an install without creating runtime directories", (t) => {
     {
       runtimes: ["claude"],
       tracker: "jira",
-      skills: ["to-specs"],
+      skills: ["to-specs-pl"],
       target,
       dryRun: true,
     },

@@ -1,6 +1,6 @@
 ---
 name: to-design-document
-description: Create or revise concise, implementation-ready software design documents that turn approved requirements into reviewable technical decisions, exact change surfaces, contracts, risks, and a requirement-traced TDD test plan. Use as the final human-review gate before implementing a non-trivial feature, defect fix, refactor, migration, integration, or cross-cutting change; or when asked for a technical design, detailed design, implementation plan, test design, or design-to-TDD handoff. Do not use to discover product intent, implement code, write tests, or independently review a completed change.
+description: Create or revise concise, implementation-ready software design documents that turn approved requirements into reviewable technical decisions, exact change surfaces, contracts, risks, and a requirement-traced TDD test plan. Use as the final human-review gate before implementing a non-trivial feature, defect fix, refactor, migration, integration, or cross-cutting change; or when asked for a technical design, detailed design, implementation plan, test design, or design-to-TDD handoff. Do not use to discover product intent, implement-pl code, write tests, or independently review a completed change.
 ---
 
 # To Design Document

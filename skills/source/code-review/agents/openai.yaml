@@ -1,4 +1,4 @@
 interface:
   display_name: "Code Review"
   short_description: "Review changes on separate Spec and Standards axes"
-  default_prompt: "Use $code-review to review changes since <fixed-point> on separate Spec and Standards axes."
+  default_prompt: "Use $code-review-pl to review changes since <fixed-point> on separate Spec and Standards axes."

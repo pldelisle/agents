@@ -1,6 +1,6 @@
 ---
-name: apply-specification-driven-code-review
-description: Perform independent, evidence-backed review of specification-driven changes across constitutions, feature specifications, plans, tasks, contracts, tests, code, migrations, dependencies, and technical designs. Use for SDD, Spec Kit, Kiro, spec-first, spec-anchored, or spec-as-source review; spec-to-code conformance; bidirectional traceability; artifact drift; agent-generated change review; pre-merge review; secure code review; architecture review; and regression-risk assessment. Do not use to implement the change, approve product intent, or redefine requirements.
+name: apply-specification-driven-code-review-pl
+description: Perform independent, evidence-backed review of specification-driven changes across constitutions, feature specifications, plans, tasks, contracts, tests, code, migrations, dependencies, and technical designs. Use for SDD, Spec Kit, Kiro, spec-first, spec-anchored, or spec-as-source review; spec-to-code conformance; bidirectional traceability; artifact drift; agent-generated change review; pre-merge review; secure code review; architecture review; and regression-risk assessment. Do not use to implement-pl the change, approve product intent, or redefine requirements.
 ---
 
 # Specification-Driven Code Review Standard

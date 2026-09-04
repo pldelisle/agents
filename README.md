@@ -68,7 +68,7 @@ The default installs every Codex/Linear skill into `.codex/skills/` in the curre
 
 ```bash
 # Install selected skills for the current user.
-npx @pldelisle/agent-skills --global --skill implement --skill to-specs
+npx @pldelisle/agent-skills --global --skill implement-pl --skill to-specs-pl
 
 # Install all three runtime variants with Jira terminology.
 npx @pldelisle/agent-skills --runtime all --tracker jira
@@ -97,7 +97,7 @@ For repeatable installs, create `agent-skills.config.json` in the directory wher
   "$schema": "https://raw.githubusercontent.com/pldelisle/agents/main/agent-skills.schema.json",
   "runtimes": ["codex", "claude"],
   "tracker": "jira",
-  "skills": ["implement", "to-specs", "to-tickets"],
+  "skills": ["implement-pl", "to-specs-pl", "to-tickets-pl"],
   "scope": "project",
   "force": false
 }

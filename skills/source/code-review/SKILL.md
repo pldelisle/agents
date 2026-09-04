@@ -1,6 +1,6 @@
 ---
-name: code-review
-description: Perform independent, evidence-backed review of code changes, branches, pull requests, work-in-progress diffs, refactors, tests, migrations, dependencies, and design documents along separate Spec and Standards axes. Use for code review, pre-merge review, review since a commit, branch, tag, or merge-base, design conformance, architecture review, regression-risk assessment, secure code review, threat modelling, or review of authentication, authorization, secrets, sensitive data, external integrations, CI/CD, infrastructure, and software-supply-chain changes. Run available Spec and Standards reviews in parallel context-isolated subagents and report them side by side. Do not use to implement the change or redefine product requirements.
+name: code-review-pl
+description: Perform independent, evidence-backed review of code changes, branches, pull requests, work-in-progress diffs, refactors, tests, migrations, dependencies, and design documents along separate Spec and Standards axes. Use for code review, pre-merge review, review since a commit, branch, tag, or merge-base, design conformance, architecture review, regression-risk assessment, secure code review, threat modelling, or review of authentication, authorization, secrets, sensitive data, external integrations, CI/CD, infrastructure, and software-supply-chain changes. Run available Spec and Standards reviews in parallel context-isolated subagents and report them side by side. Do not use to implement-pl the change or redefine product requirements.
 ---
 
 # Code Review

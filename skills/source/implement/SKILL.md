@@ -1,5 +1,5 @@
 ---
-name: implement
+name: implement-pl
 description: Implement and verify software changes according to the repository's software engineering standards. Use for source-code implementation, debugging, refactoring, architecture, testing, code review, technical planning, or any task that changes or evaluates source code. Do not use for product discovery, roadmap prioritization, or backlog refinement unless technical feasibility is explicitly requested.
 ---
 

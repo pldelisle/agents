@@ -1,6 +1,6 @@
 ---
 name: apply-specification-driven-test-engineering
-description: Design, implement, execute, and assess independent, risk-based evidence from governed specifications across functional behavior, contracts, security, performance, reliability, accessibility, compatibility, and other quality attributes. Use for SDD, Spec Kit, Kiro, spec-first or spec-anchored testing; specification quality analysis; requirement-to-test traceability; executable specifications; acceptance-test design; contract, property, model-based, and regression testing; convergence evidence; and release verification. Do not use to approve or redefine product intent, fix production code, author the technical implementation, or perform independent merge review.
+description: Design, implement-pl, execute, and assess independent, risk-based evidence from governed specifications across functional behavior, contracts, security, performance, reliability, accessibility, compatibility, and other quality attributes. Use for SDD, Spec Kit, Kiro, spec-first or spec-anchored testing; specification quality analysis; requirement-to-test traceability; executable specifications; acceptance-test design; contract, property, model-based, and regression testing; convergence evidence; and release verification. Do not use to approve or redefine product intent, fix production code, author the technical implementation, or perform independent merge review.
 ---
 
 # Specification-Driven Test Engineering Standard

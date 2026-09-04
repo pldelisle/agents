@@ -1,6 +1,6 @@
 ---
 name: engineer-tests
-description: Design, implement, execute, and assess risk-based software tests across functional behavior, integration contracts, security, performance, reliability, accessibility, compatibility, and other quality attributes. Use for QA engineering, test strategy or planning, automated test implementation, regression suites, test architecture, test-data design, flaky-test diagnosis, coverage or mutation analysis, release verification, exploratory testing, and functional or non-functional validation. Do not use to fix production code, redefine product requirements, or perform an independent code review.
+description: Design, implement-pl, execute, and assess risk-based software tests across functional behavior, integration contracts, security, performance, reliability, accessibility, compatibility, and other quality attributes. Use for QA engineering, test strategy or planning, automated test implementation, regression suites, test architecture, test-data design, flaky-test diagnosis, coverage or mutation analysis, release verification, exploratory testing, and functional or non-functional validation. Do not use to fix production code, redefine product requirements, or perform an independent code review.
 ---
 
 # Engineer Tests

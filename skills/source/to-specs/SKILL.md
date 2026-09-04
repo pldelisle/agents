@@ -1,6 +1,6 @@
 ---
-name: to-specs
-description: Create or revise reviewable feature specifications for specification-driven development by translating a product-vision conversation or approved Product Vision & Strategy Brief into scoped behavior, requirements, rules, measurable quality attributes, acceptance examples, traceability, and change governance. Use after `$discuss-vision`, or when asked to turn product strategy, high-level capability intent, discovery findings, a PRD, or clarified product direction into a specification for Spec Kit, Kiro, spec-first, spec-anchored, or spec-as-source delivery. Do not use to decide product vision or priority, choose architecture, produce technical plans, implement code, or approve the specification you authored.
+name: to-specs-pl
+description: Create or revise reviewable feature specifications for specification-driven development by translating a product-vision conversation or approved Product Vision & Strategy Brief into scoped behavior, requirements, rules, measurable quality attributes, acceptance examples, traceability, and change governance. Use after `$discuss-vision`, or when asked to turn product strategy, high-level capability intent, discovery findings, a PRD, or clarified product direction into a specification for Spec Kit, Kiro, spec-first, spec-anchored, or spec-as-source delivery. Do not use to decide product vision or priority, choose architecture, produce technical plans, implement-pl code, or approve the specification you authored.
 ---
 
 # To Specs
